@@ -5,6 +5,7 @@
     {% block titre %}
     {% endblock %}
     {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
 </head>
 
 <body>
@@ -12,10 +13,10 @@
 <header>
 
 <form id="adresseForm" action="{% url 'recherche' %}" method="get">
-    <label for="adresse">Où se cache ton camp de base ? Donne-moi ton adresse et partons à la chasse aux bonnes affaires !</label>
-    <input type="text" id="adresse" name="adresse" autocomplete="off" required>
+    <label for="adresse"></label>
+    <input type="text" id="adresse" name="adresse" autocomplete="off" required placeholder="Indiquez votre ville ou votre code postal">
 
-    <button type="submit">🔍 Rechercher</button>
+    <button type="submit">🔍</button>
 </form>
 
 

@@ -3,6 +3,8 @@
 {% block titre %}
 <title>Résultats de recherche</title>
 {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'recherche.css' %}">
+
 {% endblock %}
 
 
@@ -10,32 +12,151 @@
     <h1>Résultats pour "{{ adresse }}"</h1>
 
     <h2>TOP 5 par carburant à proximité de {{ adresse }}</h2>
-    <p>Diesel</p>
-            {% for resultat in top5_diesel %}
-                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
-                <a href="{% url 'station' id=resultat.station_id %}">Clique ici</a>
-            {% endfor %}
+<div class="top5-carburants">
+    <div class="carburant-section diesel">
+        <h3>Top 5 Diesel</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Ville</th>
+                    <th>Adresse</th>
+                    <th>Prix</th>
+                    <th>Date de mise à jour</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in top5_diesel %}
+                    <tr>
+                        <td>{{ resultat.ville }}</td>
+                        <td>{{ resultat.adresse }}</td>
+                        <td>{{ resultat.prix }} €</td>
+                        <td>{{ resultat.dat_maj }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <p>SP95</p>
-            {% for resultat in top5_sp95 %}
-                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
-            {% endfor %}
-    <p>SP98</p>
-            {% for resultat in top5_sp98 %}
-                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
-            {% endfor %}
-    <p>E85</p>
-            {% for resultat in top5_e85 %}
-                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
-            {% endfor %}
-    <p>E10</p>
-            {% for resultat in top5_e10 %}
-                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
-            {% endfor %}
-    <p>GPL</p>
-            {% for resultat in top5_gpl %}
-                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
-            {% endfor %}
+    <div class="carburant-section sp95">
+        <h3>Top 5 SP 95</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Ville</th>
+                    <th>Adresse</th>
+                    <th>Prix</th>
+                    <th>Date de mise à jour</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in top5_sp95 %}
+                    <tr>
+                        <td>{{ resultat.ville }}</td>
+                        <td>{{ resultat.adresse }}</td>
+                        <td>{{ resultat.prix }} €</td>
+                        <td>{{ resultat.dat_maj }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="carburant-section sp98">
+        <h3>Top 5 SP 98</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Ville</th>
+                    <th>Adresse</th>
+                    <th>Prix</th>
+                    <th>Date de mise à jour</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in top5_sp98 %}
+                    <tr>
+                        <td>{{ resultat.ville }}</td>
+                        <td>{{ resultat.adresse }}</td>
+                        <td>{{ resultat.prix }} €</td>
+                        <td>{{ resultat.dat_maj }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="carburant-section e85">
+        <h3>Top 5 E 85</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Ville</th>
+                    <th>Adresse</th>
+                    <th>Prix</th>
+                    <th>Date de mise à jour</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in top5_e85 %}
+                    <tr>
+                        <td>{{ resultat.ville }}</td>
+                        <td>{{ resultat.adresse }}</td>
+                        <td>{{ resultat.prix }} €</td>
+                        <td>{{ resultat.dat_maj }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="carburant-section e10">
+        <h3>Top 5 E 10</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Ville</th>
+                    <th>Adresse</th>
+                    <th>Prix</th>
+                    <th>Date de mise à jour</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in top5_e10 %}
+                    <tr>
+                        <td>{{ resultat.ville }}</td>
+                        <td>{{ resultat.adresse }}</td>
+                        <td>{{ resultat.prix }} €</td>
+                        <td>{{ resultat.dat_maj }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="carburant-section gpl">
+        <h3>Top 5 GPL</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Ville</th>
+                    <th>Adresse</th>
+                    <th>Prix</th>
+                    <th>Date de mise à jour</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in top5_gpl %}
+                    <tr>
+                        <td>{{ resultat.ville }}</td>
+                        <td>{{ resultat.adresse }}</td>
+                        <td>{{ resultat.prix }} €</td>
+                        <td>{{ resultat.dat_maj }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 
     <br>
@@ -46,27 +167,85 @@
     <h2>Les 10 stations les plus proches</h2>
 
     {% if resultats %}
-        <ul>
-            {% for resultat in resultats %}
-                <li>{{ resultat.station.ville }} - {{ resultat.distance }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucun résultat trouvé.</p>
+    <div class="stations_proximite">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ville</th>
+                    <th>Adresse</th>
+                    <th>Prix Diesel</th>
+                    <th>Prix SP95</th>
+                    <th>Prix SP98</th>
+                    <th>Prix E85</th>
+                    <th>Prix E10</th>
+                    <th>Prix GPL</th>
+                    <th>Distance (km)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in resultats %}
+                <tr>
+                    <td><a href="{% url 'station' id=resultat.station.id %}">{{ resultat.station.ville }}</a></td>
+                    <td>{{ resultat.station.adresse }}</td>
+                    <td>{{ resultat.prix }}</td>
+                    <td>{{ resultat.prix }}</td>
+                    <td>{{ resultat.prix }}</td>
+                    <td>{{ resultat.prix }}</td>
+                    <td>{{ resultat.prix }}</td>
+                    <td>{{ resultat.prix }}</td>
+                    <td>{{ resultat.distance }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% endif %}
+
+
+
 
 
     <h2>Data</h2>
 
     <h3>Prix moyen dans le secteur</h3>
 
-    {{ moyenne_prix_diesel }}
-    {{ moyenne_prix_sp95 }}
-    {{ moyenne_prix_sp98 }}
-    {{ moyenne_prix_e10 }}
-    {{ moyenne_prix_e85 }}
-    {{ moyenne_prix_gpl }}
+<div class="moyenne_carburant">
+    <div class="moyenne" id="Diesel">
+        <span class="type_carburant">Diesel</span>
+        <span class="prix_moyen">{{ moyenne_prix_diesel }} €</span>
+    </div>
 
-    <a href="/">Retour à l'accueil</a>
+    <div class="moyenne" id="SP95">
+        <span class="type_carburant">SP95</span>
+        <span class="prix_moyen">{{ moyenne_prix_sp95 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="SP98">
+        <span class="type_carburant">SP98</span>
+        <span class="prix_moyen">{{ moyenne_prix_sp98 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="E10">
+        <span class="type_carburant">E10</span>
+        <span class="prix_moyen">{{ moyenne_prix_e10 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="E85">
+        <span class="type_carburant">E85</span>
+        <span class="prix_moyen">{{ moyenne_prix_e85 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="GPL">
+        <span class="type_carburant">GPL</span>
+        <span class="prix_moyen">{{ moyenne_prix_gpl }} €</span>
+
+    </div>
+
+</div>
+
 
 {% endblock %}

@@ -1,0 +1,212 @@
+
+    /* Mise en page générale */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Centrage des titres */
+h1, h2, h3 {
+    color: #2c3e50;
+    text-align: center;
+}
+
+/* Conteneur principal pour les 3 parties */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* 1️⃣ SECTION: TOP 5 CARBURANTS */
+/* Conteneur principal qui contient les sections flex */
+.top5-carburants {
+    display: flex;
+    flex-wrap: wrap; /* Pour permettre le retour à la ligne si nécessaire */
+    gap: 20px; /* Espacement entre les sections */
+    justify-content: space-between; /* Aligne les sections de manière uniforme */
+    margin: 20px 0;
+    padding: 20px;
+}
+
+/* Chaque section de carburant */
+.carburant-section {
+    flex: 1 1 30%; /* Chaque section prendra environ 30% de la largeur de son conteneur parent */
+    box-sizing: border-box;
+    background-color: #f9f9f9; /* Fond léger pour chaque section */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre discrète pour un effet 3D */
+}
+
+/* Titre de chaque section */
+.carburant-section h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Tableau */
+.carburant-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+/* En-tête du tableau */
+.carburant-table th {
+    background-color: #34495e; /* Bleu clair */
+    color: white;
+    font-size: 1.1rem;
+    text-align: left;
+    padding: 12px 15px;
+}
+
+/* Cellules du tableau */
+.carburant-table td {
+    padding: 10px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Effet de survol pour les lignes du tableau */
+.carburant-table tr:hover {
+    background-color: #ecf0f1; /* Couleur de fond claire au survol */
+    cursor: pointer;
+}
+
+/* Lignes paires du tableau (zébrage) */
+.carburant-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Légère différence de couleur pour un effet zébré */
+}
+
+/* Lignes impaires du tableau */
+.carburant-table tr:nth-child(odd) {
+    background-color: #ffffff; /* Couleur blanche pour les lignes impaires */
+}
+
+/* Style pour les prix */
+.carburant-table .prix {
+    font-weight: bold;
+    color: #e67e22; /* Couleur spécifique pour les prix */
+}
+
+/* Style pour la colonne Date */
+.carburant-table .date {
+    color: #7f8c8d; /* Gris clair pour les dates */
+    font-style: italic;
+}
+
+/* Styles responsives pour écrans plus petits */
+@media (max-width: 768px) {
+    .top5-carburants {
+        flex-direction: column; /* Les sections seront empilées verticalement */
+        gap: 10px;
+    }
+
+    .carburant-section {
+        flex: 1 1 100%; /* Prendre toute la largeur sur les petits écrans */
+    }
+
+    .carburant-table th, .carburant-table td {
+        font-size: 0.9rem;
+        padding: 8px 10px; /* Moins de padding sur petits écrans */
+    }
+}
+
+
+
+
+/* 2️⃣ SECTION: LES STATIONS LES PLUS PROCHES */
+.stations_proximite {
+    margin: 20px 0;
+    overflow-x: auto;
+    padding: 20px;
+}
+
+.stations_proximite table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.stations_proximite th, .stations_proximite td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.stations_proximite th {
+    background-color: #34495e;
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+}
+
+.stations_proximite td a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.stations_proximite tr:hover {
+    background-color: #f5f5f5;
+}
+
+
+/* 3️⃣ SECTION: PRIX MOYENS DES CARBURANTS */
+.moyenne_carburant {
+    display: flex;
+    flex-wrap: wrap; /* Permet d’aller sur plusieurs lignes si besoin */
+    justify-content: center;
+    gap: 15px; /* Espacement entre les blocs */
+    margin: 20px 0;
+}
+
+.moyenne {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    font-weight: bold;
+    transition: transform 0.2s ease-in-out;
+}
+
+.moyenne:hover {
+    transform: scale(1.05); /* Effet au survol */
+}
+
+.type_carburant {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Style différent pour chaque type de carburant */
+#Diesel { background-color: #D0BC13; color: white; } /* Bleu */
+#SP95 { background-color: #95D600; color: white; } /* Vert */
+#SP98 { background-color: #3F6843; color: white; } /* Orange */
+#E10 { background-color: #3F6843; color: white; } /* Jaune */
+#E85 { background-color: #25FDE9; color: white; } /* Violet */
+#GPL { background-color: #34495e; color: white; } /* Gris foncé */
+
+.prix_moyen {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+

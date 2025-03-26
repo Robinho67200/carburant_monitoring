@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,9 @@ SECRET_KEY = 'django-insecure-otm%9e=#so4qbpeh+)km9y%#+k9sey0b#n3@g0=@*3fn83rfxw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1"]
 
 
 # Application definition
@@ -52,10 +55,26 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'carburant_monitoring_web.urls'
 
+# AJOUT : Stockage des medias
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+MEDIA_URL = "/media/"
+
+
+STATIC_URL = "static/"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "main_app/templates/"),
+                 os.path.join(BASE_DIR, "templates"),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
