@@ -127,13 +127,13 @@ carburants_sp95.rename(
     columns={"id": "station_id", "sp95_maj": "dat_maj", "sp95_prix": "prix"},
     inplace=True,
 )
-carburants_sp95["type_carburant"] = "SP 95"
+carburants_sp95["type_carburant"] = "SP95"
 
 carburants_e85 = df[["id", "e85_maj", "e85_prix"]].copy()
 carburants_e85.rename(
     columns={"id": "station_id", "e85_maj": "dat_maj", "e85_prix": "prix"}, inplace=True
 )
-carburants_e85["type_carburant"] = "E 85"
+carburants_e85["type_carburant"] = "E85"
 
 carburants_gpl = df[["id", "gplc_maj", "gplc_prix"]].copy()
 carburants_gpl.rename(
@@ -147,14 +147,14 @@ carburants_e10 = df[["id", "e10_maj", "e10_prix"]].copy()
 carburants_e10.rename(
     columns={"id": "station_id", "e10_maj": "dat_maj", "e10_prix": "prix"}, inplace=True
 )
-carburants_e10["type_carburant"] = "E 10"
+carburants_e10["type_carburant"] = "E10"
 
 carburants_sp98 = df[["id", "sp98_maj", "sp98_prix"]].copy()
 carburants_sp98.rename(
     columns={"id": "station_id", "sp98_maj": "dat_maj", "sp98_prix": "prix"},
     inplace=True,
 )
-carburants_sp98["type_carburant"] = "SP 98"
+carburants_sp98["type_carburant"] = "SP98"
 
 
 carburants = pd.concat(

@@ -5,7 +5,7 @@ WITH latest_sp95 AS (
         dat_maj,
         ROW_NUMBER() OVER (PARTITION BY station_id_id ORDER BY dat_maj DESC) AS rn
     FROM main_app_carburants
-    WHERE type_carburant = 'SP 95' AND prix != 'nan'
+    WHERE type_carburant = 'SP95' AND prix != 'nan'
 )
 
 SELECT
