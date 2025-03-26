@@ -93,7 +93,9 @@ stations["automate_24_24"] = stations["automate_24_24"].apply(
     lambda x: True if x == "Oui" else False
 )
 stations["latitude"] = stations["latitude"].astype(float)
+stations["latitude"] = stations["latitude"].apply(lambda x : x/100000)
 stations["longitude"] = stations["longitude"].astype(float)
+stations["longitude"] = stations["longitude"].apply(lambda x : x/100000)
 stations["automate_24_24"] = stations["automate_24_24"].astype(bool)
 
 # Création de la table services
