@@ -12,6 +12,7 @@
     <p>Diesel</p>
             {% for resultat in top5_diesel %}
                 <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
+                <a href="{% url 'station' id=resultat.station_id %}">Clique ici</a>
             {% endfor %}
 
     <p>SP95</p>

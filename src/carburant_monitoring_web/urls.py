@@ -18,9 +18,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from main_app.views import index, recherche
+from main_app.views import index, recherche, station
 
 urlpatterns = [
     path("", index, name="index"),
     path("recherche/", recherche, name="recherche"),
+    path("station/<str:id>", station, name="station"),
 ]

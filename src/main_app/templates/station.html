@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Station {{ station.id }}</title>
+</head>
+<body>
+
+<h1>Station {{ station.id }}</h1>
+
+<h2>Adresse</h2>
+{{ station.adresse  }} {{ station.code_postal }} {{ station.ville }}
+
+<h2>Prix des carburants</h2>
+{% for carburant in carburants %}
+<li>{{ carburant.type_carburant }} : {{ carburant.prix }}  ({{ carburant.dat_maj }})</li>
+
+{% endfor %}
+
+
+<h2>Services</h2>
+{% for service in services %}
+<li>{{ service }}</li>
+
+{% endfor %}
+
+</body>
+</html>

@@ -140,3 +140,14 @@ class StationWithE85(models.Model):
     class Meta:
         managed = False
         db_table = "stations_with_e85"
+
+
+class LastReadingStationFuel(models.Model):
+    station_id = models.CharField(primary_key=True)
+    type_carburant = models.CharField()
+    prix = models.FloatField(null=True)
+    dat_maj = models.DateTimeField(null=True)
+
+    class Meta:
+        managed = False
+        db_table = "last_reading_by_station_and_fuel"

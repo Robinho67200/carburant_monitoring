@@ -18,7 +18,7 @@ from .models import (
     StationWithSP98,
     StationWithE10,
     StationWithE85,
-    StationWithGPL,
+    StationWithGPL, Services, Carburants, LastReadingStationFuel,
 )
 
 
@@ -206,3 +206,21 @@ def recherche(request):
             "moyenne_prix_gpl": moyenne_prix_gpl,
         },
     )
+
+
+
+def station(request, id) :
+    # Récupérer tous les magasins de la base de données
+    station = Stations.objects.filter(id=id).first()
+    services = Services.objects.filter(
+        station_id=station.id
+    ).first()
+
+    carburants = LastReadingStationFuel.objects.filter(
+        station_id=station.id
+    )
+
+    # Ajouter le total du panier au contexte
+    context = {"station": station, 'services' : services.service, "carburants": carburants}
+
+    return render(request, "station.html", context)
