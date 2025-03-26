@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats de recherche</title>
+</head>
+<body>
+    <h1>Résultats pour "{{ adresse }}"</h1>
+
+    <h2>TOP 5 par carburant à proximité de {{ adresse }}</h2>
+    <p>Diesel</p>
+            {% for resultat in top5_diesel %}
+                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
+            {% endfor %}
+
+    <p>SP95</p>
+            {% for resultat in top5_sp95 %}
+                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
+            {% endfor %}
+    <p>SP98</p>
+            {% for resultat in top5_sp98 %}
+                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
+            {% endfor %}
+    <p>E85</p>
+            {% for resultat in top5_e85 %}
+                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
+            {% endfor %}
+    <p>E10</p>
+            {% for resultat in top5_e10 %}
+                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
+            {% endfor %}
+    <p>GPL</p>
+            {% for resultat in top5_gpl %}
+                <li>{{ resultat.ville }} - {{ resultat.prix }}</li>
+            {% endfor %}
+
+
+    <br>
+    <br>
+    <br>
+
+
+    <h2>Les 10 stations les plus proches</h2>
+
+    {% if resultats %}
+        <ul>
+            {% for resultat in resultats %}
+                <li>{{ resultat.station.ville }} - {{ resultat.distance }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun résultat trouvé.</p>
+    {% endif %}
+
+
+    <h2>Data</h2>
+
+    <h3>Prix moyen dans le secteur</h3>
+
+    {{ moyenne_prix_diesel }}
+    {{ moyenne_prix_sp95 }}
+    {{ moyenne_prix_sp98 }}
+    {{ moyenne_prix_e10 }}
+    {{ moyenne_prix_e85 }}
+    {{ moyenne_prix_gpl }}
+
+    <a href="/">Retour à l'accueil</a>
+
+
+
+</body>
+</html>
