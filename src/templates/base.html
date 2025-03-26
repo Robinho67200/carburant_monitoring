@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block titre %}
+    {% endblock %}
+    {% load static %}
+</head>
+
+<body>
+
+<header>
+
+<form id="adresseForm" action="{% url 'recherche' %}" method="get">
+    <label for="adresse">Où se cache ton camp de base ? Donne-moi ton adresse et partons à la chasse aux bonnes affaires !</label>
+    <input type="text" id="adresse" name="adresse" autocomplete="off" required>
+
+    <button type="submit">🔍 Rechercher</button>
+</form>
+
+
+</header>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

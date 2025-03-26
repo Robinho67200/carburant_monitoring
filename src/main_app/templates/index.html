@@ -1,21 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparateur de carburants</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block titre %}
+<title>Comparateur de carburants</title>
+{% load static %}
+{% endblock %}
 
 
-<form id="adresseForm" action="{% url 'recherche' %}" method="get">
-    <label for="adresse">Où se cache ton camp de base ? Donne-moi ton adresse et partons à la chasse aux bonnes affaires !</label>
-    <input type="text" id="adresse" name="adresse" autocomplete="off" required>
 
-    <button type="submit">🔍 Rechercher</button>
-</form>
+{% block content %}
+
+{% endblock %}
 
 
-</body>
 
-</html>
