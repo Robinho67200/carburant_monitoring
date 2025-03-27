@@ -151,3 +151,12 @@ class LastReadingStationFuel(models.Model):
     class Meta:
         managed = False
         db_table = "last_reading_by_station_and_fuel"
+
+class PriceCarburantsByStation(models.Model):
+    station_id = models.CharField(primary_key=True)
+    type_carburant = models.CharField()
+    prix = models.FloatField(null=True)
+
+    class Meta:
+        managed = False
+        db_table = "price_carburants_by_station"

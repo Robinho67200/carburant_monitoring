@@ -18,7 +18,7 @@ from .models import (
     StationWithSP98,
     StationWithE10,
     StationWithE85,
-    StationWithGPL, Services, Carburants, LastReadingStationFuel,
+    StationWithGPL, Services, Carburants, LastReadingStationFuel, PriceCarburantsByStation,
 )
 
 
@@ -186,12 +186,20 @@ def recherche(request):
         moyenne_prix_gpl,
     ) = fetch_nearby_stations(request, adresse)
 
+    # Récupérer la liste des ids de station
+    station_ids = [result['station'].id for result in nearby]
+
+    prix_carburants_station = PriceCarburantsByStation.objects.filter(
+        station_id__in=station_ids
+    )
+
     return render(
         request,
         "recherche.html",
         {
             "adresse": adresse,
             "resultats": nearby,
+            "prix_carburants_station": prix_carburants_station,
             "top5_diesel": top5_diesel,
             "top5_sp95": top5_sp95,
             "top5_sp98": top5_sp98,

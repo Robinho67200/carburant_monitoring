@@ -4,7 +4,7 @@
 <title>Résultats de recherche</title>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'recherche.css' %}">
-
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" media="print" onload="this.media='all'">
 {% endblock %}
 
 
@@ -168,36 +168,116 @@
 
     {% if resultats %}
     <div class="stations_proximite">
-        <table>
-            <thead>
-                <tr>
-                    <th>Ville</th>
-                    <th>Adresse</th>
-                    <th>Prix Diesel</th>
-                    <th>Prix SP95</th>
-                    <th>Prix SP98</th>
-                    <th>Prix E85</th>
-                    <th>Prix E10</th>
-                    <th>Prix GPL</th>
-                    <th>Distance (km)</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for resultat in resultats %}
-                <tr>
-                    <td><a href="{% url 'station' id=resultat.station.id %}">{{ resultat.station.ville }}</a></td>
-                    <td>{{ resultat.station.adresse }}</td>
-                    <td>{{ resultat.prix }}</td>
-                    <td>{{ resultat.prix }}</td>
-                    <td>{{ resultat.prix }}</td>
-                    <td>{{ resultat.prix }}</td>
-                    <td>{{ resultat.prix }}</td>
-                    <td>{{ resultat.prix }}</td>
-                    <td>{{ resultat.distance }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<table>
+    <thead>
+        <tr>
+            <th>Ville</th>
+            <th>Adresse</th>
+            <th>Prix Diesel</th>
+            <th>Prix SP95</th>
+            <th>Prix SP98</th>
+            <th>Prix E85</th>
+            <th>Prix E10</th>
+            <th>Prix GPL</th>
+            <th>Distance (km)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for resultat in resultats %}
+        <tr>
+            <td><a href="{% url 'station' id=resultat.station.id %}">{{ resultat.station.ville }}</a></td>
+            <td>{{ resultat.station.adresse }}</td>
+
+            <!-- Prix Diesel -->
+            {% for prix in prix_carburants_station %}
+                {% if prix.station_id == resultat.station.id and prix.type_carburant == "Diesel" %}
+                    <td>
+                        {% if prix.prix == 0.0 %}
+                            <p class="prix_carburant_stations_proximite" id="Diesel">-</p>
+                        {% else %}
+                            <p class="prix_carburant_stations_proximite" id="Diesel">{{ prix.prix }}</p>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Prix SP95 -->
+            {% for prix in prix_carburants_station %}
+                {% if prix.station_id == resultat.station.id and prix.type_carburant == "SP95" %}
+                    <td>
+                        {% if prix.prix == 0.0 %}
+                            <p class="prix_carburant_stations_proximite" id="SP95">-</p>
+                        {% else %}
+                            <p class="prix_carburant_stations_proximite" id="SP95">{{ prix.prix }}</p>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Prix SP98 -->
+            {% for prix in prix_carburants_station %}
+                {% if prix.station_id == resultat.station.id and prix.type_carburant == "SP98" %}
+                    <td>
+                        {% if prix.prix == 0.0 %}
+                            <p class="prix_carburant_stations_proximite" id="SP98">-</p>
+                        {% else %}
+                            <p class="prix_carburant_stations_proximite" id="SP98">{{ prix.prix }}</p>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Prix E85 -->
+            {% for prix in prix_carburants_station %}
+                {% if prix.station_id == resultat.station.id and prix.type_carburant == "E85" %}
+                    <td>
+                        {% if prix.prix == 0.0 %}
+                            <p class="prix_carburant_stations_proximite" id="E85">-</p>
+                        {% else %}
+                        <p class="prix_carburant_stations_proximite" id="E85">{{ prix.prix }}</p>
+
+                        {% endif %}
+                    </td>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Prix E10 -->
+            {% for prix in prix_carburants_station %}
+                {% if prix.station_id == resultat.station.id and prix.type_carburant == "E10" %}
+                    <td>
+                        {% if prix.prix == 0.0 %}
+                            <p class="prix_carburant_stations_proximite" id="E10">-</p>
+                        {% else %}
+                            <p class="prix_carburant_stations_proximite" id="E10">{{ prix.prix }}</p>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Prix GPL -->
+            {% for prix in prix_carburants_station %}
+                {% if prix.station_id == resultat.station.id and prix.type_carburant == "GPL" %}
+                    <td>
+                        {% if prix.prix == 0.0 %}
+                            <p class="prix_carburant_stations_proximite" id="GPL">-</p>
+                        {% else %}
+                            <p class="prix_carburant_stations_proximite" id="GPL">{{ prix.prix }}</p>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            {% endfor %}
+
+                <td>
+                    <div class="distance-table">
+                        <i class="fa-solid fa-location-dot"></i> {{ resultat.distance }}
+                    </div>
+                </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
     </div>
     {% endif %}
 
