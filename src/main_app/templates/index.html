@@ -3,11 +3,240 @@
 {% block titre %}
 <title>Comparateur de carburants</title>
 {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
+
 {% endblock %}
 
 
 
 {% block content %}
+
+    <h2>Prix moyen en France pour aujourd'hui</h2>
+
+<div class="moyenne_carburant">
+    <div class="moyenne" id="Diesel">
+        <span class="type_carburant">Diesel</span>
+        <span class="prix_moyen">{{ moyenne_prix_diesel }} €</span>
+    </div>
+
+    <div class="moyenne" id="SP95">
+        <span class="type_carburant">SP95</span>
+        <span class="prix_moyen">{{ moyenne_prix_sp95 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="SP98">
+        <span class="type_carburant">SP98</span>
+        <span class="prix_moyen">{{ moyenne_prix_sp98 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="E10">
+        <span class="type_carburant">E10</span>
+        <span class="prix_moyen">{{ moyenne_prix_e10 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="E85">
+        <span class="type_carburant">E85</span>
+        <span class="prix_moyen">{{ moyenne_prix_e85 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="GPL">
+        <span class="type_carburant">GPL</span>
+        <span class="prix_moyen">{{ moyenne_prix_gpl }} €</span>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+    <h2>Classement du prix des carburants moyen par région en France aujourd'hui</h2>
+<div class="top5-carburants">
+    <div class="carburant-section diesel">
+        <h3>Classement Diesel</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Classement</th>
+                    <th>Région</th>
+                    <th>Prix moyen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in classement_diesel %}
+                    <tr>
+                        <td>{{ resultat.classement }}</td>
+                        <td>{{ resultat.nom_region }}</td>
+                        <td>{{ resultat.prix_moyen }} €</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="carburant-section sp95">
+        <h3>Classement SP 95</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Classement</th>
+                    <th>Région</th>
+                    <th>Prix moyen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in classement_sp95 %}
+                    <tr>
+                        <td>{{ resultat.classement }}</td>
+                        <td>{{ resultat.nom_region }}</td>
+                        <td>{{ resultat.prix_moyen }} €</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="carburant-section sp98">
+        <h3>Classement SP 98</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Classement</th>
+                    <th>Région</th>
+                    <th>Prix moyen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in classement_sp98 %}
+                    <tr>
+                        <td>{{ resultat.classement }}</td>
+                        <td>{{ resultat.nom_region }}</td>
+                        <td>{{ resultat.prix_moyen }} €</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="carburant-section e85">
+        <h3>Classement E 85</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Classement</th>
+                    <th>Région</th>
+                    <th>Prix moyen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in classement_e85 %}
+                    <tr>
+                        <td>{{ resultat.classement }}</td>
+                        <td>{{ resultat.nom_region }}</td>
+                        <td>{{ resultat.prix_moyen }} €</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="carburant-section e10">
+        <h3>Classement E 10</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Classement</th>
+                    <th>Région</th>
+                    <th>Prix moyen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in classement_e10 %}
+                    <tr>
+                        <td>{{ resultat.classement }}</td>
+                        <td>{{ resultat.nom_region }}</td>
+                        <td>{{ resultat.prix_moyen }} €</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="carburant-section gpl">
+        <h3>Classement GPL</h3>
+        <table class="carburant-table">
+            <thead>
+                <tr>
+                    <th>Classement</th>
+                    <th>Région</th>
+                    <th>Prix moyen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in classement_gpl %}
+                    <tr>
+                        <td>{{ resultat.classement }}</td>
+                        <td>{{ resultat.nom_region }}</td>
+                        <td>{{ resultat.prix_moyen }} €</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<h2>Station les moins cher par carburant en France aujourd'hui</h2>
+
+
+    <div class="stations_proximite">
+<table>
+    <thead>
+        <tr>
+            <th>Adresse</th>
+            <th>Type de carburant</th>
+            <th>Prix</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for resultat in stations_cheaper %}
+        <tr>
+            <td><a href="{% url 'station' id=resultat.id %}">{{ resultat.adresse }} {{ resultat.code_postal }} {{ resultat.ville }}</a></td>
+
+                <td>
+                    <div class="distance-table" id="{{ resultat.type_carburant }}">
+                         {{ resultat.type_carburant }}
+                    </div>
+                </td>
+
+                <td>
+                    <div class="distance-table">
+                        <i class="fa-solid fa-location-dot"></i> {{ resultat.prix }}
+                    </div>
+                </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
 
 {% endblock %}
 

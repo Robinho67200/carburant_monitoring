@@ -18,7 +18,8 @@ from .models import (
     StationWithSP98,
     StationWithE10,
     StationWithE85,
-    StationWithGPL, Services, Carburants, LastReadingStationFuel, PriceCarburantsByStation,
+    StationWithGPL, Services, Carburants, LastReadingStationFuel, PriceCarburantsByStation, RegionCheaperByFuel,
+    StationsCheaperByFuel,
 )
 
 
@@ -147,6 +148,9 @@ def fetch_nearby_stations(request, adresse):
     return nearby_stores
 
 
+import plotly.express as px
+import pandas as pd
+
 def index(request):
     """
     Vue de la page d'accueil
@@ -156,8 +160,53 @@ def index(request):
     # Récupérer tous les magasins de la base de données
     all_stations = Stations.objects.all()
 
+
+    # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
+    stations_diesel = StationWithDiesel.objects.all()
+    moyenne_prix_diesel = round(stations_diesel.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
+    stations_sp95 = StationWithSP95.objects.all()
+    moyenne_prix_sp95 = round(stations_sp95.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_sp98 = StationWithSP98.objects.all()
+    moyenne_prix_sp98 = round(stations_sp98.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_e10 = StationWithE10.objects.all()
+    moyenne_prix_e10 = round(stations_e10.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_e85 = StationWithE85.objects.all()
+    moyenne_prix_e85 = round(stations_e85.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_gpl = StationWithGPL.objects.all()
+    moyenne_prix_gpl = round(stations_gpl.aggregate(Avg("prix"))["prix__avg"], 2)
+
+
+    classement_diesel = RegionCheaperByFuel.objects.filter(type_carburant="Diesel")
+    classement_sp95 = RegionCheaperByFuel.objects.filter(type_carburant="SP95")
+    classement_sp98 = RegionCheaperByFuel.objects.filter(type_carburant="SP98")
+    classement_e10 = RegionCheaperByFuel.objects.filter(type_carburant="E10")
+    classement_e85 = RegionCheaperByFuel.objects.filter(type_carburant="E85")
+    classement_gpl = RegionCheaperByFuel.objects.filter(type_carburant="GPL")
+
+    stations_cheaper = StationsCheaperByFuel.objects.all()
+
     # Ajouter le total du panier au contexte
-    context = {"stations": all_stations}
+    context = {"stations": all_stations,
+               "moyenne_prix_diesel": moyenne_prix_diesel,
+               "moyenne_prix_sp95": moyenne_prix_sp95,
+               "moyenne_prix_sp98": moyenne_prix_sp98,
+               "moyenne_prix_e10": moyenne_prix_e10,
+               "moyenne_prix_e85": moyenne_prix_e85,
+               "moyenne_prix_gpl": moyenne_prix_gpl,
+               "classement_diesel": classement_diesel,
+               "classement_sp95": classement_sp95,
+               "classement_sp98": classement_sp98,
+               "classement_e10": classement_e10,
+               "classement_e85": classement_e85,
+               "classement_gpl": classement_gpl,
+               "stations_cheaper": stations_cheaper
+               }
 
     return render(request, "index.html", context)
 

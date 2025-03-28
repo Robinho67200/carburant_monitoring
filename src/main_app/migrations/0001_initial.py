@@ -8,60 +8,115 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='stations',
+            name="stations",
             fields=[
-                ('id', models.CharField(primary_key=True, serialize=False)),
-                ('latitude', models.FloatField()),
-                ('longitude', models.FloatField()),
-                ('code_postal', models.CharField()),
-                ('adresse', models.CharField()),
-                ('ville', models.CharField()),
-                ('nom_departement', models.CharField()),
-                ('code_departement', models.CharField()),
-                ('nom_region', models.CharField()),
-                ('code_region', models.CharField()),
-                ('automate_24_24', models.BooleanField()),
+                ("id", models.CharField(primary_key=True, serialize=False)),
+                ("latitude", models.FloatField()),
+                ("longitude", models.FloatField()),
+                ("code_postal", models.CharField()),
+                ("adresse", models.CharField()),
+                ("ville", models.CharField()),
+                ("nom_departement", models.CharField()),
+                ("code_departement", models.CharField()),
+                ("nom_region", models.CharField()),
+                ("code_region", models.CharField()),
+                ("automate_24_24", models.BooleanField()),
             ],
         ),
         migrations.CreateModel(
-            name='services',
+            name="services",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('service', models.JSONField(null=True)),
-                ('station_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='main_app.stations')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("service", models.JSONField(null=True)),
+                (
+                    "station_id",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="main_app.stations",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ruptures',
+            name="ruptures",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type_carburant', models.CharField()),
-                ('rupture_debut', models.DateField()),
-                ('type_rupture', models.CharField()),
-                ('station_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='main_app.stations')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("type_carburant", models.CharField()),
+                ("rupture_debut", models.DateField()),
+                ("type_rupture", models.CharField()),
+                (
+                    "station_id",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="main_app.stations",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='horaires',
+            name="horaires",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('horaires', models.JSONField()),
-                ('station_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='main_app.stations')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("horaires", models.JSONField()),
+                (
+                    "station_id",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="main_app.stations",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='carburants',
+            name="carburants",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type_carburant', models.CharField()),
-                ('prix', models.FloatField()),
-                ('dat_maj', models.DateField()),
-                ('station_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='main_app.stations')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("type_carburant", models.CharField()),
+                ("prix", models.FloatField()),
+                ("dat_maj", models.DateField()),
+                (
+                    "station_id",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="main_app.stations",
+                    ),
+                ),
             ],
         ),
     ]

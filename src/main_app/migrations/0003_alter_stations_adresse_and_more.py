@@ -6,43 +6,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main_app', '0002_alter_carburants_dat_maj_alter_carburants_prix'),
+        ("main_app", "0002_alter_carburants_dat_maj_alter_carburants_prix"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='stations',
-            name='adresse',
+            model_name="stations",
+            name="adresse",
             field=models.CharField(null=True),
         ),
         migrations.AlterField(
-            model_name='stations',
-            name='code_departement',
+            model_name="stations",
+            name="code_departement",
             field=models.CharField(null=True),
         ),
         migrations.AlterField(
-            model_name='stations',
-            name='code_postal',
+            model_name="stations",
+            name="code_postal",
             field=models.CharField(null=True),
         ),
         migrations.AlterField(
-            model_name='stations',
-            name='code_region',
+            model_name="stations",
+            name="code_region",
             field=models.CharField(null=True),
         ),
         migrations.AlterField(
-            model_name='stations',
-            name='nom_departement',
+            model_name="stations",
+            name="nom_departement",
             field=models.CharField(null=True),
         ),
         migrations.AlterField(
-            model_name='stations',
-            name='nom_region',
+            model_name="stations",
+            name="nom_region",
             field=models.CharField(null=True),
         ),
         migrations.AlterField(
-            model_name='stations',
-            name='ville',
+            model_name="stations",
+            name="ville",
             field=models.CharField(null=True),
         ),
     ]

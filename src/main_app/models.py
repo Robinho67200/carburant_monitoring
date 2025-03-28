@@ -160,3 +160,29 @@ class PriceCarburantsByStation(models.Model):
     class Meta:
         managed = False
         db_table = "price_carburants_by_station"
+
+
+class RegionCheaperByFuel(models.Model):
+    id = models.CharField(primary_key=True)
+    nom_region = models.CharField(null=True)
+    type_carburant = models.CharField()
+    prix_moyen = models.FloatField(null=True)
+    classement = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = "region_cheaper_by_fuel"
+
+
+class StationsCheaperByFuel(models.Model):
+    id = models.CharField(primary_key=True)
+    adresse = models.CharField(null=True)
+    code_postal = models.CharField(null=True)
+    ville = models.CharField(null=True)
+    type_carburant = models.CharField()
+    prix = models.FloatField(null=True)
+    classement = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = "stations_cheaper_by_fuel"

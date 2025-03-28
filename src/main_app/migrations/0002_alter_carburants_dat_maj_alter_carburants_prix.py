@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main_app', '0001_initial'),
+        ("main_app", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='carburants',
-            name='dat_maj',
+            model_name="carburants",
+            name="dat_maj",
             field=models.DateField(null=True),
         ),
         migrations.AlterField(
-            model_name='carburants',
-            name='prix',
+            model_name="carburants",
+            name="prix",
             field=models.FloatField(null=True),
         ),
     ]
