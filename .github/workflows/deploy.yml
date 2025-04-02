@@ -19,6 +19,9 @@ jobs:
       - name: 🔑 Installer git-crypt
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo apt-get install -y git-crypt"
 
+      - name: pull
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull"
+
       - name: 🔓 Déverrouiller les fichiers avec git-crypt
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
@@ -30,8 +33,8 @@ jobs:
             rm .env.key
           "
 
-      - name: pull
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}  "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && cd .. && sudo docker-compose up -d --build carburants-web db-carburants db-airflow-carburants airflow-carburants && exit"
+      - name: deploy
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}  "cd .. && sudo docker-compose up -d --build carburants-web db-carburants db-airflow-carburants airflow-carburants && exit"
 
       - name: cleanup
         run: rm -rf ~/.ssh
