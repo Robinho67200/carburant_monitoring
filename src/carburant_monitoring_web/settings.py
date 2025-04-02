@@ -34,11 +34,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-otm%9e=#so4qbpeh+)km9y%#+k9sey0b#n3@g0=@*3fn83rfxw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ['ENV'] == 'DEV' :
+    DEBUG = True
+elif os.environ['ENV'] == 'PROD' :
+    DEBUG = False
 
 ALLOWED_HOSTS = [
     "localhost",
-    "127.0.0.1"]
+    "127.0.0.1",
+    "www.mon-carburant.fr"
+    "mon-carburant.fr",
+    "82.112.253.58"]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://econodrive.fr",
+    "https://www.econodrive.fr"
+]
+
+
 
 
 # Application definition
