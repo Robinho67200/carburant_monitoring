@@ -12,6 +12,16 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Lire une variable d'environnement
+DB_NAME = os.getenv("DB_NAME_CARBURANTS")
+USER = os.getenv("USER_CARBURANTS")
+PASSWORD = os.getenv("PASSWORD_CARBURANTS")
+HOST = os.getenv("HOST_CARBURANTS")
+PORT = os.getenv("PORT_CARBURANTS")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -96,11 +106,11 @@ WSGI_APPLICATION = 'carburant_monitoring_web.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'carburant_monitoring',
-        'USER': 'robin',
-        'PASSWORD':'azerty',
-        'HOST':'172.17.0.2',
-        'PORT':'5432'
+        'NAME': DB_NAME,
+        'USER': USER,
+        'PASSWORD': PASSWORD,
+        'HOST': HOST,
+        'PORT': PORT
     }
 }
 
