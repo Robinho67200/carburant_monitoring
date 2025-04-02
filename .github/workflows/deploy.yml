@@ -16,22 +16,22 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
 
-      - name: connect
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }}"
-
       - name: 🔑 Installer git-crypt
-        run: sudo apt-get install -y git-crypt
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo apt-get install -y git-crypt"
 
       - name: 🔓 Déverrouiller les fichiers avec git-crypt
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
         run: |
-          echo "$GIT_CRYPT_KEY" | base64 --decode > .env.key
-          git-crypt unlock .env.key
-          rm .env.key  # Nettoyage après utilisation
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            cd ${{ secrets.WORK_DIR }} && \
+            echo '${{ secrets.GIT_CRYPT_KEY }}' | base64 --decode > .env.key && \
+            git-crypt unlock .env.key && \
+            rm .env.key
+          "
 
       - name: pull
-        run: git pull && cd .. && sudo docker-compose up -d --build carburants-web db-carburants db-airflow-carburants airflow-carburants && exit
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}  "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && cd .. && sudo docker-compose up -d --build carburants-web db-carburants db-airflow-carburants airflow-carburants && exit"
 
       - name: cleanup
         run: rm -rf ~/.ssh
