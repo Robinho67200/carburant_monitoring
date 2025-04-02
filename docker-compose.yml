@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  web:
+    build: ./src
+    env_file:
+      - ./.env
+    volumes:
+      - ./src:/code
+      - static_volume:/code/staticfiles
+    expose:
+      - "6000"
+    container_name: carburants-web
+    depends_on:
+      - db-carburants
+
+  db-carburants:
+    image: postgres:14
+    container_name: carburants_db
+    environment:
+      POSTGRES_USER: ${USER_CARBURANTS}
+      POSTGRES_PASSWORD: ${PASSWORD_CARBURANTS}
+      POSTGRES_DB: ${DB_NAME_CARBURANTS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - carburants_data:/var/lib/postgresql/data
+
+  db-airflow-carburants:
+    image: postgres:13
+    container_name: db-airflow-carburants
+    restart: always
+    environment:
+      POSTGRES_USER: ${USER_AIRFLOW_CARBURANTS}
+      POSTGRES_PASSWORD: ${PASSWORD_AIRFLOW_CARBURANTS}
+      POSTGRES_DB: ${DB_NAME_AIRFLOW_CARBURANTS}
+    ports:
+      - "5433:5433"
+    volumes:
+      - airflow_carburants_data:/var/lib/postgresql/data
+
+  airflow:
+    build: ./airflow
+    container_name: airflow_server
+    restart: always
+    env_file:
+      - ./.env
+    depends_on:
+      - db-airflow-carburants
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${USER_AIRFLOW_CARBURANTS}:${PASSWORD_AIRFLOW_CARBURANTS}@db-airflow-carburants:5432/${DB_NAME_AIRFLOW_CARBURANTS}
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./airflow/dags:/usr/local/airflow/dags
+      - ./airflow/request_api:/usr/local/airflow/request_api
+    entrypoint: ["/bin/bash", "-c", "airflow db init && airflow users create --username $USER_AIRFLOW_CONNECTION --password $PASSWORD_AIRFLOW_CONNECTION --firstname $FIRST_NAME_AIRFLOW_CONNECTION --lastname $LAST_NAME_AIRFLOW_CONNECTION --role Admin --email $EMAIL_AIRFLOW_CONNECTION && airflow scheduler & airflow webserver --port 8080"]
+
+volumes:
+  carburants_data:
+  static_volume:
+  airflow_carburants_data:
