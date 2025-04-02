@@ -5,6 +5,18 @@ import pandas as pd
 from glom import glom
 import psycopg2
 from psycopg2 import Error
+import os
+import subprocess
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Lire une variable d'environnement
+DB_NAME = os.getenv("DB_NAME_CARBURANTS")
+USER = os.getenv("USER_CARBURANTS")
+PASSWORD = os.getenv("PASSWORD_CARBURANTS")
+HOST = os.getenv("HOST_CARBURANTS")
+PORT = os.getenv("PORT_CARBURANTS")
 
 def extraire_horaires(dictionnaire:str|dict) -> dict:
     """
@@ -173,11 +185,11 @@ carburants["dat_maj"] = carburants["dat_maj"].replace({pd.NaT: None})
 
 # Connexion à votre base de données PostgreSQL
 connection = psycopg2.connect(
-    dbname="carburant_monitoring",
-    user="robin",
-    password="azerty",
-    host="172.17.0.2",
-    port="5432",
+    dbname=DB_NAME,
+    user=USER,
+    password=PASSWORD,
+    host=HOST,
+    port=PORT,
 )
 
 cursor = connection.cursor()
