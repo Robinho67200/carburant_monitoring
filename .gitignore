@@ -4,3 +4,12 @@ __pycache__/
 target/
 dbt_packages/
 logs/
+airflow/dbt/dbt_project/README.md
+airflow/dbt/dbt_project/analyses/
+airflow/dbt/dbt_project/macros/
+airflow/dbt/dbt_project/seeds/
+airflow/dbt/dbt_project/snapshots/
+airflow/dbt/dbt_project/tests/
+my_secret.key
+src/carburant_monitoring_web/__pycache__/settings.cpython-310.pyc
+src/carburant_monitoring_web/__pycache__/urls.cpython-310.pyc
