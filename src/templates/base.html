@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block titre %}
+    {% endblock %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
+</head>
+
+<body>
+
+<header>
+
+<form id="adresseForm" action="{% url 'recherche' %}" method="get">
+    <label for="adresse"></label>
+    <input type="text" id="adresse" name="adresse" autocomplete="off" required placeholder="Indiquez votre ville ou votre code postal">
+
+    <button type="submit">🔍</button>
+</form>
+
+
+</header>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

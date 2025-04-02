@@ -1,0 +1,63 @@
+.station-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    border-bottom: 2px solid #D0BC13;
+    padding-bottom: 5px;
+}
+
+.adresse {
+    font-size: 18px;
+    font-weight: bold;
+    color: #34495e;
+    margin-bottom: 10px;
+}
+
+/* Liste des prix des carburants */
+.carburants {
+    list-style: none;
+    padding: 0;
+}
+
+.carburant-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #ecf0f1;
+}
+
+/* Couleurs pour chaque carburant */
+#Diesel { background-color: #D0BC13; color: white; } /* Bleu */
+#SP95 { background-color: #95D600; color: white; } /* Vert */
+#SP98 { background-color: #3F6843; color: white; } /* Orange */
+#E10 { background-color: #3F6843; color: white; } /* Jaune */
+#E85 { background-color: #109589; color: white; } /* Violet */
+#GPL { background-color: #34495e; color: white; } /* Gris foncé */
+
+/* Services */
+.services {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.service-item {
+    background-color: #95a5a6;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+}

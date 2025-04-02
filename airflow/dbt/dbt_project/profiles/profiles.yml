@@ -1,0 +1,12 @@
+dbt_project:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('HOST_CARBURANTS') }}"
+      user: "{{ env_var('USER_CARBURANTS') }}"
+      password: "{{ env_var('PASSWORD_CARBURANTS') }}"
+      port: "{{ env_var('PORT_CARBURANTS') | int }}"
+      dbname: "{{ env_var('DB_NAME_CARBURANTS') }}"
+      schema: public
+      threads: 4

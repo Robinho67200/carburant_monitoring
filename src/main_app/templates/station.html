@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block titre %}
+<title>Station {{ station.id }}</title>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'station.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="station-container">
+    <h1>Station {{ station.id }}</h1>
+
+    <h2>Adresse</h2>
+    <p class="adresse">{{ station.adresse }}, {{ station.code_postal }} {{ station.ville }}</p>
+
+    <h2>Prix des carburants</h2>
+    <ul class="carburants">
+        {% for carburant in carburants %}
+        <li class="carburant-item" id="{{ carburant.type_carburant }}">
+            <span>{{ carburant.type_carburant }}</span>
+            <span>{{ carburant.prix }} €</span>
+            <span>({{ carburant.dat_maj }})</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Services</h2>
+    <ul class="services">
+        {% for service in services %}
+        <li class="service-item">{{ service }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+{% endblock %}
