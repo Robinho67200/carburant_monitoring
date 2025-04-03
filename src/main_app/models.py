@@ -56,6 +56,7 @@ class StationWithDiesel(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    days_difference = models.IntegerField()
 
     class Meta:
         managed = False
@@ -72,6 +73,7 @@ class StationWithSP95(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    days_difference = models.IntegerField()
 
     class Meta:
         managed = False
@@ -88,6 +90,7 @@ class StationWithSP98(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    days_difference = models.IntegerField()
 
     class Meta:
         managed = False
@@ -104,6 +107,7 @@ class StationWithGPL(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    days_difference = models.IntegerField()
 
     class Meta:
         managed = False
@@ -120,6 +124,7 @@ class StationWithE10(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    days_difference = models.IntegerField()
 
     class Meta:
         managed = False
@@ -136,6 +141,7 @@ class StationWithE85(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    days_difference = models.IntegerField()
 
     class Meta:
         managed = False
@@ -147,6 +153,7 @@ class LastReadingStationFuel(models.Model):
     type_carburant = models.CharField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    days_difference = models.IntegerField()
 
     class Meta:
         managed = False

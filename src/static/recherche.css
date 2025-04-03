@@ -122,6 +122,16 @@ h1, h2, h3 {
 }
 
 
+.date-table {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#today { color: #0E7100; }
+#yesterday { color: #95D600; }
+#old { color: #d9783e; }
+#very-old { color: #df5b5b; }
+
 
 
 /* 2️⃣ SECTION: LES STATIONS LES PLUS PROCHES */
@@ -218,4 +228,3 @@ h1, h2, h3 {
     border-radius: 5px;
     font-weight: bold;
 }
-
