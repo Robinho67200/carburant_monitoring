@@ -42,14 +42,14 @@ elif os.environ['ENV'] == 'PROD' :
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "www.mon-carburant.fr"
+    "www.mon-carburant.fr",
     "mon-carburant.fr",
     "82.112.253.58"]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://econodrive.fr",
-    "https://www.econodrive.fr"
+    "https://mon-carburant.fr",
+    "https://www.mon-carburant.fr"
 ]
 
 
