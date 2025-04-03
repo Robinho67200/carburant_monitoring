@@ -22,7 +22,13 @@
         <li class="carburant-item" id="{{ carburant.type_carburant }}">
             <span>{{ carburant.type_carburant }}</span>
             <span>{{ carburant.prix }} €</span>
-            <span>({{ carburant.dat_maj }})</span>
+            {% if carburant.days_difference == 0 %}
+                <span>Aujourd'hui</span>
+            {% elif carburant.days_difference == 1 %}
+                <span>Hier</span>
+            {% else %}
+                <span>Il y a {{ carburant.days_difference }} jours</span>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>

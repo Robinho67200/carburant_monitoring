@@ -17,7 +17,8 @@ SELECT
     s.code_postal,
     s.automate_24_24,
     ld.prix,
-    ld.dat_maj
+    ld.dat_maj,
+    (CURRENT_DATE - ld.dat_maj::DATE) AS days_difference
 FROM main_app_stations s
 LEFT JOIN latest_diesel ld ON s.id = ld.station_id_id
 WHERE ld.rn = 1

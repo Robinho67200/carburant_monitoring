@@ -13,6 +13,7 @@ SELECT
     station_id_id as station_id,
     type_carburant,
     prix,
-    dat_maj
+    dat_maj,
+    (CURRENT_DATE - dat_maj::DATE) AS days_difference
 FROM ranking_by_station_carburant
 WHERE rn = 1
