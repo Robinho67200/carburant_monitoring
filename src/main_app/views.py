@@ -79,35 +79,62 @@ def get_data(latitude: int, longitude: int, radius_km: int) -> list:
     stations_diesel = StationWithDiesel.objects.filter(
         station_id__in=nearby_station_ids
     )
-    moyenne_prix_diesel = round(stations_diesel.aggregate(Avg("prix"))["prix__avg"], 2)
-    # Trier par prix du Diesel (les 5 moins chères)
-    stations_diesel = stations_diesel.order_by("prix")[:5]
+    if stations_diesel :
+        moyenne_prix_diesel = round(stations_diesel.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        stations_diesel = stations_diesel.order_by("prix")[:5]
+    else :
+        moyenne_prix_diesel = 0
+        stations_diesel = 0
 
     # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
     stations_sp95 = StationWithSP95.objects.filter(station_id__in=nearby_station_ids)
-    moyenne_prix_sp95 = round(stations_sp95.aggregate(Avg("prix"))["prix__avg"], 2)
-    # Trier par prix du Diesel (les 5 moins chères)
-    stations_sp95 = stations_sp95.order_by("prix")[:5]
+    if stations_sp95 :
+        moyenne_prix_sp95 = round(stations_sp95.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        stations_sp95 = stations_sp95.order_by("prix")[:5]
+    else :
+        moyenne_prix_sp95 = 0
+        stations_sp95 = 0
 
     stations_sp98 = StationWithSP98.objects.filter(station_id__in=nearby_station_ids)
-    moyenne_prix_sp98 = round(stations_sp98.aggregate(Avg("prix"))["prix__avg"], 2)
-    # Trier par prix du Diesel (les 5 moins chères)
-    stations_sp98 = stations_sp98.order_by("prix")[:5]
+    if stations_sp98 :
+        moyenne_prix_sp98 = round(stations_sp98.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        stations_sp98 = stations_sp98.order_by("prix")[:5]
+    else :
+        moyenne_prix_sp98 = 0
+        stations_sp98 = 0
+
 
     stations_e10 = StationWithE10.objects.filter(station_id__in=nearby_station_ids)
-    moyenne_prix_e10 = round(stations_e10.aggregate(Avg("prix"))["prix__avg"], 2)
-    # Trier par prix du Diesel (les 5 moins chères)
-    stations_e10 = stations_e10.order_by("prix")[:5]
+    if stations_e10 :
+        moyenne_prix_e10 = round(stations_e10.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        stations_e10 = stations_e10.order_by("prix")[:5]
+    else :
+        moyenne_prix_e10 = 0
+        stations_e10 = 0
 
     stations_e85 = StationWithE85.objects.filter(station_id__in=nearby_station_ids)
-    moyenne_prix_e85 = round(stations_e85.aggregate(Avg("prix"))["prix__avg"], 2)
-    # Trier par prix du Diesel (les 5 moins chères)
-    stations_e85 = stations_e85.order_by("prix")[:5]
+    if stations_e85 :
+        moyenne_prix_e85 = round(stations_e85.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        stations_e85 = stations_e85.order_by("prix")[:5]
+    else :
+        moyenne_prix_e85 = 0
+        stations_e85 = 0
 
     stations_gpl = StationWithGPL.objects.filter(station_id__in=nearby_station_ids)
-    moyenne_prix_gpl = round(stations_gpl.aggregate(Avg("prix"))["prix__avg"], 2)
-    # Trier par prix du Diesel (les 5 moins chères)
-    stations_gpl = stations_gpl.order_by("prix")[:5]
+    if stations_gpl :
+        moyenne_prix_gpl = round(stations_gpl.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        stations_gpl = stations_gpl.order_by("prix")[:5]
+    else :
+        moyenne_prix_gpl = 0
+        stations_gpl = 0
+
+
 
     # Les 10 stations les plus proches
     nearby_stores = sorted(nearby_stores, key=lambda x: x["distance"])[:10]
