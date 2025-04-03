@@ -6,8 +6,9 @@ from glom import glom
 import psycopg2
 from psycopg2 import Error
 import os
-import subprocess
 from dotenv import load_dotenv
+from datetime import datetime
+import pytz
 
 load_dotenv()
 
@@ -182,6 +183,10 @@ carburants = pd.concat(
 )
 carburants["dat_maj"] = carburants["dat_maj"].replace({pd.NaT: None})
 
+carburants = carburants.dropna(subset=["dat_maj"])
+today = datetime.now(pytz.timezone("Europe/Paris"))
+carburants["date_diff"] = carburants["dat_maj"].apply(lambda x : (today-x).days )
+carburants = carburants.query("date_diff <=4")
 
 # Connexion à votre base de données PostgreSQL
 connection = psycopg2.connect(
