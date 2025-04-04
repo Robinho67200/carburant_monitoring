@@ -34,7 +34,7 @@ jobs:
           "
 
       - name: deploy
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}  "sudo docker-compose up -d --build carburants-web db-carburants db-airflow-carburants airflow-carburants && exit"
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}  "sudo docker-compose up -d --build carburants-web db-carburants db-airflow-carburants airflow-carburants nginx-proxy && exit"
 
       - name: cleanup
         run: rm -rf ~/.ssh
