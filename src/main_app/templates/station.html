@@ -4,6 +4,7 @@
 <title>Station {{ station.id }}</title>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'station.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" media="print" onload="this.media='all'">
 {% endblock %}
 
 
@@ -34,6 +35,9 @@
     </ul>
 
     <h2>Services</h2>
+    {% if station.automate_24_24 %}
+        <p class="automate"><i class="fa-regular fa-clock"></i> Automate 24/24</p>
+    {% endif %}
     <ul class="services">
         {% for service in services %}
         <li class="service-item">{{ service }}</li>

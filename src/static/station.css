@@ -46,6 +46,11 @@ h2 {
 #GPL { background-color: #34495e; color: white; } /* Gris foncé */
 
 /* Services */
+
+.automate {
+    font-weight:bold;
+}
+
 .services {
     list-style: none;
     padding: 0;
