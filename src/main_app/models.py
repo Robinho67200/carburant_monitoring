@@ -206,3 +206,13 @@ class EvolutionOfNationalFuelPrices(models.Model):
     class Meta:
         managed = False
         db_table = "evolution_of_national_fuel_prices"
+
+class EvolutionOfStationFuelPrices(models.Model):
+    station_id = models.CharField(primary_key=True)
+    date_maj = models.DateTimeField(null=True)
+    type_carburant = models.CharField()
+    prix_moyen = models.FloatField(null=True)
+
+    class Meta:
+        managed = False
+        db_table = "evolution_of_station_fuel_prices"

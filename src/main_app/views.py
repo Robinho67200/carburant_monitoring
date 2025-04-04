@@ -20,7 +20,7 @@ from .models import (
     StationWithE10,
     StationWithE85,
     StationWithGPL, Services, Carburants, LastReadingStationFuel, PriceCarburantsByStation, RegionCheaperByFuel,
-    StationsCheaperByFuel, EvolutionOfNationalFuelPrices,
+    StationsCheaperByFuel, EvolutionOfNationalFuelPrices, EvolutionOfStationFuelPrices,
 )
 
 
@@ -332,7 +332,40 @@ def station(request, id) :
         station_id=station.id
     )
 
+    try :
+        # Génération du graphique
+        carburants_graph = EvolutionOfStationFuelPrices.objects.filter(
+            station_id=station.id
+        ).values(
+            "date_maj", "type_carburant", "prix_moyen"
+        )
+        df = pd.DataFrame(list(carburants_graph))
+        df["date_maj"] = pd.to_datetime(df["date_maj"])
+
+        fig = px.line(
+            df,
+            x="date_maj",
+            y="prix_moyen",
+            color="type_carburant",
+            markers=True,
+            labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
+        )
+
+        fig.update_layout(
+            xaxis_title="Date",
+            yaxis_title="Prix moyen (€)",
+            xaxis=dict(tickformat="%Y-%m-%d"),
+            hovermode="x unified",
+            paper_bgcolor="white",
+            plot_bgcolor="white",
+        )
+
+        graph_html = pio.to_html(fig, full_html=False)
+
+    except :
+        graph_html = 0
+
     # Ajouter le total du panier au contexte
-    context = {"station": station, 'services' : services.service, "carburants": carburants}
+    context = {"station": station, 'services' : services.service, "carburants": carburants, "graph_html": graph_html}
 
     return render(request, "station.html", context)
