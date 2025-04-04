@@ -10,6 +10,7 @@ from geopy.distance import geodesic
 from django.db.models import Avg
 from django.http import JsonResponse
 from django.shortcuts import render
+import plotly.io as pio
 
 from .models import (
     Stations,
@@ -19,7 +20,7 @@ from .models import (
     StationWithE10,
     StationWithE85,
     StationWithGPL, Services, Carburants, LastReadingStationFuel, PriceCarburantsByStation, RegionCheaperByFuel,
-    StationsCheaperByFuel,
+    StationsCheaperByFuel, EvolutionOfNationalFuelPrices,
 )
 
 
@@ -218,7 +219,33 @@ def index(request):
 
     stations_cheaper = StationsCheaperByFuel.objects.all()
 
-    # Ajouter le total du panier au contexte
+    # Génération du graphique
+    carburants_graph = EvolutionOfNationalFuelPrices.objects.all().values(
+        "date_maj", "type_carburant", "prix_moyen"
+    )
+    df = pd.DataFrame(list(carburants_graph))
+    df["date_maj"] = pd.to_datetime(df["date_maj"])
+
+    fig = px.line(
+        df,
+        x="date_maj",
+        y="prix_moyen",
+        color="type_carburant",
+        markers=True,
+        labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
+    )
+
+    fig.update_layout(
+        xaxis_title="Date",
+        yaxis_title="Prix moyen (€)",
+        xaxis=dict(tickformat="%Y-%m-%d"),
+        hovermode="x unified",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+    )
+
+    graph_html = pio.to_html(fig, full_html=False)
+
     context = {"stations": all_stations,
                "moyenne_prix_diesel": moyenne_prix_diesel,
                "moyenne_prix_sp95": moyenne_prix_sp95,
@@ -232,7 +259,8 @@ def index(request):
                "classement_e10": classement_e10,
                "classement_e85": classement_e85,
                "classement_gpl": classement_gpl,
-               "stations_cheaper": stations_cheaper
+               "stations_cheaper": stations_cheaper,
+               "graph_html": graph_html
                }
 
     return render(request, "index.html", context)
