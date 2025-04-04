@@ -4,7 +4,7 @@
 <title>Comparateur de carburants</title>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
-
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- 📌 Inclure Plotly -->
 {% endblock %}
 
 
@@ -236,9 +236,15 @@
     </tbody>
 </table>
 
-
+<h2>Évolution du prix par type de carburant en France</h2>
+    <div>
+        {{ graph_html|safe }}
+    </div>
 
 {% endblock %}
+
+
+
 
 
 
