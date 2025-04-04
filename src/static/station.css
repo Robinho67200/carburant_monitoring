@@ -25,7 +25,7 @@ h2 {
     padding: 0;
 }
 
-.carburant-item {
+.carburant-item, .type_carburant {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -36,6 +36,65 @@ h2 {
     font-weight: bold;
     background-color: #ecf0f1;
 }
+
+.positif {
+    font-weight: bold;
+    color: #df5b5b
+}
+
+.negatif {
+    font-weight: bold;
+    color: #0E7100
+}
+
+.neutre {
+    font-weight: bold;
+    color: #4f4f4f
+}
+
+
+
+.comparaison-geographique {
+    margin: 20px 0;
+    overflow-x: auto;
+    padding: 20px;
+}
+
+.comparaison-geographique table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.comparaison-geographique th, .comparaison-geographique td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.comparaison-geographique th {
+    background-color: #34495e;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+.comparaison-geographique td a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.comparaison-geographique tr:hover {
+    background-color: #f5f5f5;
+}
+
+
+
+
 
 /* Couleurs pour chaque carburant */
 #Diesel { background-color: #D0BC13; color: white; } /* Bleu */

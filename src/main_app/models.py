@@ -154,6 +154,9 @@ class LastReadingStationFuel(models.Model):
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
     days_difference = models.IntegerField()
+    pourcentage_variation_department = models.FloatField()
+    pourcentage_variation_region = models.FloatField()
+    pourcentage_variation_city = models.FloatField()
 
     class Meta:
         managed = False

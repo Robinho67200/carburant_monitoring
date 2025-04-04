@@ -34,6 +34,62 @@
         {% endfor %}
     </ul>
 
+    {% if carburants %}
+        <h2>Comparaison des prix du carburant</h2>
+            <div class="comparaison-geographique">
+                <table>
+                <thead>
+                    <tr>
+                        <th>Type de carburant</th>
+                        <th>Variation département</th>
+                        <th>Variation région</th>
+                        <th>Variation ville</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for carburant in carburants %}
+                        <tr>
+                            <td>
+                                <p class="type_carburant" id="{% if carburant.type_carburant == 'Diesel' %}Diesel{% elif carburant.type_carburant == 'SP95' %}SP95{% elif carburant.type_carburant == 'SP98' %}SP98{% elif carburant.type_carburant == 'E10' %}E10{% elif carburant.type_carburant == 'E85' %}E85{% elif carburant.type_carburant == 'GPL' %}GPL{% endif %}">
+                                    {{ carburant.type_carburant }}
+                                </p>
+                            </td>
+
+                            <td>
+                                <p class="{% if carburant.pourcentage_variation_department < 0 %}negatif{% elif carburant.pourcentage_variation_department > 0 %}positif{% else %}neutre{% endif %}">
+                                    {{ carburant.pourcentage_variation_department }} %
+                                </p>
+                            </td>
+
+                            <td>
+                                <p class="{% if carburant.pourcentage_variation_region < 0 %}negatif{% elif carburant.pourcentage_variation_region > 0 %}positif{% else %}neutre{% endif %}">
+                                    {{ carburant.pourcentage_variation_region }} %
+                                </p>
+                            </td>
+
+                            <td>
+                                <p class="{% if carburant.pourcentage_variation_city < 0 %}negatif{% elif carburant.pourcentage_variation_city > 0 %}positif{% else %}neutre{% endif %}">
+                                    {{ carburant.pourcentage_variation_city }} %
+                                </p>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+
+    {% endif %}
+
+
+
+
+
+
+
+
+
+
     <h2>Services</h2>
     {% if station.automate_24_24 %}
         <p class="automate"><i class="fa-regular fa-clock"></i> Automate 24/24</p>
@@ -44,6 +100,7 @@
         {% endfor %}
     </ul>
 </div>
+
 
 
 
