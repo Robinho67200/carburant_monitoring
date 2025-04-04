@@ -20,13 +20,13 @@ h2 {
 }
 
 /* Liste des prix des carburants */
-.carburants {
+.carburants, .comparaison-geographique {
     list-style: none;
     padding: 0;
+    overflow-x: auto;
 }
 
 .carburant-item, .type_carburant {
-    display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
@@ -53,14 +53,7 @@ h2 {
 }
 
 
-
-.comparaison-geographique {
-    margin: 20px 0;
-    overflow-x: auto;
-    padding: 20px;
-}
-
-.comparaison-geographique table {
+table {
     width: 100%;
     border-collapse: collapse;
     background-color: #fff;
@@ -69,32 +62,42 @@ h2 {
     overflow: hidden;
 }
 
-.comparaison-geographique th, .comparaison-geographique td {
+th, td {
     padding: 12px 15px;
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
 
-.comparaison-geographique th {
+th {
     background-color: #34495e;
     color: #fff;
     font-weight: bold;
     text-align: center;
 }
 
-.comparaison-geographique td a {
+td a {
     color: #3498db;
     text-decoration: none;
     font-weight: bold;
 }
 
-.comparaison-geographique tr:hover {
+tr:hover {
     background-color: #f5f5f5;
 }
 
+.prix {
+    font-weight : bold;
+}
 
+.date-table {
+    font-size: 18px;
+    font-weight: bold;
+}
 
-
+#today { color: #0E7100; }
+#yesterday { color: #95D600; }
+#old { color: #d9783e; }
+#very-old { color: #df5b5b; }
 
 /* Couleurs pour chaque carburant */
 #Diesel { background-color: #D0BC13; color: white; } /* Bleu */

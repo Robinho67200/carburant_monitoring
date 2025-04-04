@@ -17,22 +17,52 @@
     <h2>Adresse</h2>
     <p class="adresse">{{ station.adresse }}, {{ station.code_postal }} {{ station.ville }}</p>
 
+
+    {% if carburants %}
     <h2>Prix des carburants</h2>
-    <ul class="carburants">
-        {% for carburant in carburants %}
-        <li class="carburant-item" id="{{ carburant.type_carburant }}">
-            <span>{{ carburant.type_carburant }}</span>
-            <span>{{ carburant.prix }} €</span>
-            {% if carburant.days_difference == 0 %}
-                <span>Aujourd'hui</span>
-            {% elif carburant.days_difference == 1 %}
-                <span>Hier</span>
-            {% else %}
-                <span>Il y a {{ carburant.days_difference }} jours</span>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
+        <div class="carburants">
+            <table>
+            <thead>
+                <tr>
+                    <th>Type de carburant</th>
+                    <th>Prix</th>
+                    <th>Mis à jour</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for carburant in carburants %}
+                    <tr>
+                        <td>
+                            <p class="type_carburant" id="{% if carburant.type_carburant == 'Diesel' %}Diesel{% elif carburant.type_carburant == 'SP95' %}SP95{% elif carburant.type_carburant == 'SP98' %}SP98{% elif carburant.type_carburant == 'E10' %}E10{% elif carburant.type_carburant == 'E85' %}E85{% elif carburant.type_carburant == 'GPL' %}GPL{% endif %}">
+                                {{ carburant.type_carburant }}
+                            </p>
+                        </td>
+
+                        <td>
+                            <p class="prix">
+                                {{ carburant.prix }} €
+                            </p>
+                        </td>
+
+
+                        {% if carburant.days_difference == 0 %}
+                            <td class="date-table" id="today">Aujourd'hui</td>
+                        {% elif carburant.days_difference == 1 %}
+                            <td class="date-table" id="yesterday">Hier</td>
+                        {% elif carburant.days_difference <= 3 %}
+                            <td class="date-table" id="old">Il y a {{ carburant.days_difference }} jours</td>
+                        {% else %}
+                            <td class="date-table" id="very-old">Il y a {{ carburant.days_difference }} jours</td>
+                        {% endif %}
+
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+
+{% endif %}
 
     {% if carburants %}
         <h2>Comparaison des prix du carburant</h2>
