@@ -157,11 +157,12 @@ def get_data(latitude: int, longitude: int, radius_km: int) -> list:
     )
 
 
-def fetch_nearby_stations(request, adresse):
+def fetch_nearby_stations(request, adresse, nb_km_max):
     """
     Retourne les stations dans un rayon de 20 km autour d'une adresse
     :param request:
     :param adresse:
+    :param nb_km_max:
     :return:
     """
     # Obtenez les coordonnées de l'adresse
@@ -171,7 +172,7 @@ def fetch_nearby_stations(request, adresse):
         return JsonResponse({"success": False, "error": "Adresse non trouvée."})
 
     # Récupérer les magasins à proximité
-    nearby_stores = get_data(latitude, longitude, 20)
+    nearby_stores = get_data(latitude, longitude, nb_km_max)
 
     return nearby_stores
 
@@ -273,6 +274,7 @@ def recherche(request):
     :return:
     """
     adresse = request.GET.get("adresse", "")
+    nb_km_max = request.GET.get("nb_km_max", "")
 
     (
         nearby,
@@ -288,7 +290,7 @@ def recherche(request):
         moyenne_prix_e10,
         moyenne_prix_e85,
         moyenne_prix_gpl,
-    ) = fetch_nearby_stations(request, adresse)
+    ) = fetch_nearby_stations(request, adresse, int(nb_km_max))
 
     # Récupérer la liste des ids de station
     station_ids = [result['station'].id for result in nearby]
@@ -302,6 +304,7 @@ def recherche(request):
         "recherche.html",
         {
             "adresse": adresse,
+            "nb_km_max": nb_km_max,
             "resultats": nearby,
             "prix_carburants_station": prix_carburants_station,
             "top5_diesel": top5_diesel,
