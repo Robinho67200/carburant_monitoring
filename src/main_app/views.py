@@ -299,6 +299,47 @@ def recherche(request):
         station_id__in=station_ids
     )
 
+    try :
+        # Génération du graphique
+        carburants_graph = EvolutionOfStationFuelPrices.objects.filter(
+            station_id__in=station_ids
+        ).values(
+            "date_maj", "type_carburant", "prix_moyen"
+        )
+        df = pd.DataFrame(list(carburants_graph))
+        df["date_maj"] = pd.to_datetime(df["date_maj"])
+
+        df = (
+            df
+            .groupby(["type_carburant", "date_maj"])
+            ["prix_moyen"].mean()
+            .reset_index()
+        )
+
+        fig = px.line(
+            df,
+            x="date_maj",
+            y="prix_moyen",
+            color="type_carburant",
+            markers=True,
+            labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
+        )
+
+        fig.update_layout(
+            xaxis_title="Date",
+            yaxis_title="Prix moyen (€)",
+            xaxis=dict(tickformat="%Y-%m-%d"),
+            hovermode="x unified",
+            paper_bgcolor="white",
+            plot_bgcolor="white",
+        )
+
+        graph_html = pio.to_html(fig, full_html=False)
+
+    except Exception as e:
+        print(e)
+        graph_html = 0
+
     return render(
         request,
         "recherche.html",
@@ -319,6 +360,7 @@ def recherche(request):
             "moyenne_prix_e10": moyenne_prix_e10,
             "moyenne_prix_e85": moyenne_prix_e85,
             "moyenne_prix_gpl": moyenne_prix_gpl,
+            "graph_html" : graph_html
         },
     )
 
