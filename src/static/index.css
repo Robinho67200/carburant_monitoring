@@ -129,28 +129,6 @@
     font-style: italic;
 }
 
-/* Styles responsives pour écrans plus petits */
-@media (max-width: 768px) {
-    .top5-carburants {
-        flex-direction: column; /* Les sections seront empilées verticalement */
-        gap: 10px;
-    }
-
-    .carburant-section {
-        flex: 1 1 100%; /* Prendre toute la largeur sur les petits écrans */
-    }
-
-    .carburant-table th, .carburant-table td {
-        font-size: 0.9rem;
-        padding: 8px 10px; /* Moins de padding sur petits écrans */
-    }
-}
-
-
-
-
-
-
 
 /* 2️⃣ SECTION: LES STATIONS LES PLUS PROCHES */
 .stations_proximite {
@@ -198,4 +176,38 @@
     text-align: center;
     font-weight: bold;
 
+}
+
+.information p {
+    font-weight: bold;
+    text-align: center;
+}
+
+.information {
+    width: 80%;
+    margin: 0 auto;
+
+}
+
+
+
+/* Styles responsives pour écrans plus petits */
+@media (max-width: 768px) {
+    .top5-carburants {
+        flex-direction: column; /* Les sections seront empilées verticalement */
+        gap: 10px;
+    }
+
+    .carburant-section {
+        flex: 1 1 100%; /* Prendre toute la largeur sur les petits écrans */
+    }
+
+    .carburant-table th, .carburant-table td {
+        font-size: 0.9rem;
+        padding: 8px 10px; /* Moins de padding sur petits écrans */
+    }
+
+    .moyenne {
+        width: auto;
+    }
 }
