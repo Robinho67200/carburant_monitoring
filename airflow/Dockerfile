@@ -37,7 +37,7 @@ RUN pip install apache-airflow==${AIRFLOW_VERSION} \
 
 # Installer les dépendances supplémentaires
 RUN pip install pytz
-RUN pip install psycopg[binary]==3.1.12 psycopg2-binary==2.9.9 requests pandas glom pyarrow python-dotenv
+RUN pip install psycopg[binary]==3.1.12 psycopg2-binary==2.9.9 requests pandas glom pyarrow python-dotenv overpy
 
 RUN pip install --upgrade typing_extensions
 

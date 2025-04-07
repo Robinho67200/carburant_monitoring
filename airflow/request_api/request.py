@@ -9,6 +9,7 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 import pytz
+import overpy
 
 load_dotenv()
 
@@ -18,6 +19,9 @@ USER = os.getenv("USER_CARBURANTS")
 PASSWORD = os.getenv("PASSWORD_CARBURANTS")
 HOST = os.getenv("HOST_CARBURANTS")
 PORT = os.getenv("PORT_CARBURANTS")
+
+
+
 
 def extraire_horaires(dictionnaire:str|dict) -> dict:
     """
@@ -66,6 +70,55 @@ def extraire_horaires(dictionnaire:str|dict) -> dict:
 
     return result
 
+
+def get_fuel_stations(lat, lon, radius=500):
+    query = f"""
+    node(around:{radius},{lat},{lon})["amenity"="fuel"];
+    out;
+    """
+
+    result = api.query(query)
+
+    stations = []
+    for node in result.nodes:
+        if node.tags.get("name", "Inconnu") == "Inconnu" and node.tags.get("operator", "Inconnu") != "Inconnu":
+            stations.append({
+                "id": row['id'],
+                "name": node.tags.get("operator", "Inconnu"),
+                "marque": node.tags.get("operator", "Inconnu")
+            })
+        else :
+            stations.append({
+                "id": row['id'],
+                "name": node.tags.get("name", "Inconnu"),
+                "marque": node.tags.get("operator", "Inconnu")
+            })
+
+    return stations
+
+
+def assign_marque(row):
+    for marque_normalisee, noms_possibles in marques_mapping.items():
+        for nom in noms_possibles:
+            if nom == row:
+                if marque_normalisee == 'Autre':
+                    return nom
+                return marque_normalisee
+
+    return None
+
+
+def normaliser_texte(texte):
+    if not isinstance(texte, str):
+        return ''
+    return texte.lower()
+
+def transform_brand(x):
+    texte = normaliser_texte(x)
+    for marque, mots_cles in mot_clefs_par_marque.items():
+        if any(mot in texte for mot in mots_cles):
+            return marque
+    return 'Indépendant'
 
 r = requests.get(
     "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/exports/parquet"
@@ -200,6 +253,148 @@ connection = psycopg2.connect(
 cursor = connection.cursor()
 connection.commit()
 
+# Exécuter la requête SELECT
+cursor.execute("SELECT id FROM main_app_stations")
+
+# Récupérer les noms des colonnes
+colonnes = [desc[0] for desc in cursor.description]
+
+# Récupérer toutes les données
+donnees = cursor.fetchall()
+
+# Créer un DataFrame
+df_stations = pd.DataFrame(donnees, columns=colonnes)
+
+stations["id"] = stations["id"].astype(str)
+df_stations["id"] = df_stations["id"].astype(str)
+
+# Garder uniquement les lignes de 'stations' dont l'id n'est pas dans 'df_stations'
+stations = stations[~stations["id"].isin(df_stations["id"])]
+
+# Initialisation du client Overpass
+api = overpy.Overpass()
+
+# Récupérer uniquement la première station-service pour chaque paire de coordonnées
+first_stations = []
+for _, row in stations.iterrows():
+    stations_nearby = get_fuel_stations(row['latitude'], row['longitude'])
+
+    if stations_nearby:  # Si des stations ont été trouvées
+        first_station = stations_nearby[0]  # Récupérer la première station
+    else:
+        # Si aucune station n'a été trouvée, ajouter une entrée avec des valeurs par défaut
+        first_station = {
+            "id": row['id'],
+            "name": "Inconnu",
+            "marque": "Inconnu"
+        }
+
+    first_stations.append(first_station)
+
+stations_with_names = pd.DataFrame(first_stations)
+
+if len(stations) != 0 :
+    stations =(
+        stations
+        .merge(stations_with_names, how="inner", on="id")
+    )
+
+# Dictionnaire : marque normalisée -> valeurs possibles dans la colonne "marque"
+marques_mapping = {
+    'Total': [
+        'Total', 'TOTAL', 'total',
+        "Relais Total du Bol d'or", 'Relais Total des Aubrais',
+        'Relais Total de la Porte Océane', 'Relais Total de Pomméniac',
+        'Relais Total du Bocage', "Relais Total de L'espace Saint-Germain"
+    ],
+    'Total Energies': [
+        'TotalEnergies', 'Total Energies', 'Total Energy',
+        'TotalEnergies Access', 'Totalenergies', 'TotalEnergie', 'Total Energie'
+    ],
+    'Total Access': ['Total Access', 'Total Acces', 'total access'],
+    'Intermarché': [
+        'Intermarché', 'Groupement des Mousquetaires', 'intermarché',
+        'Intermarché contact', 'Intermarché Barjols', 'Les Mousquetaires',
+        'Groupement Les Mousquetaires', 'Groupement les mousquetaires'
+    ],
+    'Carrefour Contact': ['carrefour contact', 'Carrefour Contact'],
+    'Carrefour Market': ['Carrefour Market', 'Carrefour market - Trilport'],
+    'Carrefour': ['Carrefour', 'Groupe Carrefour'],
+    'Esso': ['Esso', 'Esso S.A.F.', 'esso'],
+    'Système U': [
+        'Super U', 'U Express', 'U express', 'Super U La Tranche Sur Mer',
+        'Système U', 'Hyper U', 'Magasins U'
+    ],
+    'Avia': ['Avia', 'AVIA', 'avia'],
+    'Auchan': ['Auchan', 'Auchan Carburants', 'Groupe Auchan', 'Auchan Saint-Genis-Laval'],
+    'Shell': ['Shell', 'SHELL', 'shell'],
+    'Leclerc': ['E. Leclerc', 'E.Leclerc', 'Leclerc', 'E. Leclerc Ville-la-Grand'],
+    'Casino': ['Casino', 'Groupe Casino', 'Casino Carburants'],
+    'Elan': ['Elan', 'ELAN'],
+    'Eni': ['Eni', 'ENI France SARL', 'ENI'],
+    'Elf': ['Elf', 'elf'],
+    'Netto': ['Netto', 'netto'],
+    'Colruyt': ['Colruyt', 'Colruyt Group'],
+    'Autre': [
+        'Esso Express', 'Carrefour Express', 'BP', 'Cora', 'Agip', 'Vito',
+        'Dyneff', 'Fulli', 'Spar', 'Match', 'Leader Price', 'Shopi'
+    ]
+}
+
+if len(stations) != 0 :
+    # Appliquer la fonction à la colonne 'name' de ton DataFrame
+    stations['marque'] = stations['marque'].apply(assign_marque)
+
+    # Filtrer les stations où 'marque' est None (celles qui n'ont pas de correspondance)
+    stations_normalisées = stations[stations['marque'].notna()]
+
+    id = stations_normalisées['id'].tolist()
+    stations = stations[~stations['id'].isin(id)]
+    stations['marque'] = ""
+
+# Dictionnaire des marques : marque normalisée → liste de mots-clés à détecter
+mot_clefs_par_marque = {
+    'Intermarché': ['intermarché'],
+    'Carrefour Contact': ['carrefour contact'],
+    'Carrefour Market': ['carrefour market'],
+    'Carrefour': ['carrefour'],
+    'Système U': ['station u', 'système u', 'super u', 'u express', 'hyper u', 'marché u'],
+    'Avia': ['avia'],
+    'Total Access': ['total access'],
+    'Esso Express': ['esso express'],
+    'Total Energies': ['totalenergies', 'total energies'],
+    'Auchan': ['auchan', 'atac'],
+    'Casino': ['casino'],
+    'Dyneff': ['dyneff'],
+    'Netto': ['netto'],
+    'Match': ['match'],
+    'Shell': ['shell'],
+    'Spar': ['spar'],
+    'Colruyt': ['dats 24'],
+    'Elan': ['elan'],
+    'G20': ['g20'],
+    'Vito': ['vito'],
+    'Total': ['total'],
+    'Leclerc': ['leclerc'],
+    'Esso': ['esso'],
+    'BP': ['bp'],
+    'Eni': ['eni'],
+    'Agip': ['agip'],
+    'Utile': ['utile'],
+    'Maximarché': ['maximarché'],
+    'Bi1': ['bi1'],
+}
+
+if len(stations) != 0 :
+    stations['marque'] = stations['name'].apply(transform_brand)
+
+    stations = pd.concat([
+        stations_normalisées,
+        stations
+    ], ignore_index=True)
+
+
+
 for index, row in stations.iterrows():
     cursor.execute(
         """
@@ -214,9 +409,10 @@ for index, row in stations.iterrows():
             code_departement,
             nom_region,
             code_region,
-            automate_24_24
+            automate_24_24,
+            marque
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT ("id") DO NOTHING
     """,
         (
@@ -231,6 +427,7 @@ for index, row in stations.iterrows():
             row["nom_region"],
             row["code_region"],
             row["automate_24_24"],
+            row["marque"]
         ),
     )
 

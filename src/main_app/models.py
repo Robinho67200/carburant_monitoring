@@ -15,6 +15,7 @@ class Stations(models.Model):
     nom_region = models.CharField(null=True)
     code_region = models.CharField(null=True)
     automate_24_24 = models.BooleanField()
+    marque = models.CharField(null=True)
 
 
 class Carburants(models.Model):
