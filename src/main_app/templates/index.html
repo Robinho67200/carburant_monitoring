@@ -209,6 +209,7 @@
 <table>
     <thead>
         <tr>
+            <th>Marque</th>
             <th>Adresse</th>
             <th>Type de carburant</th>
             <th>Prix</th>
@@ -217,20 +218,27 @@
     </thead>
     <tbody>
         {% for resultat in stations_cheaper %}
-        <tr>
-            <td><a href="{% url 'station' id=resultat.id %}">{{ resultat.adresse }} {{ resultat.code_postal }} {{ resultat.ville }}</a></td>
+        <tr onclick="window.location='{% url 'station' id=resultat.id %}'" class="clickable-row">
+            <td>
+                <img src="/media/logo/{{ resultat.marque }}.png" alt="Logo {{ resultat.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
+            </td>
 
-                <td>
-                    <div class="distance-table" id="{{ resultat.type_carburant }}">
-                         {{ resultat.type_carburant }}
-                    </div>
-                </td>
+            <td>
+                <div><strong>{{ resultat.marque }}</strong> — {{ resultat.ville }}</div>
+                <div class="adresse">{{ resultat.adresse }}</div>
+            </td>
 
-                <td>
-                    <div class="distance-table">
-                        <i class="fa-solid fa-location-dot"></i> {{ resultat.prix }}
-                    </div>
-                </td>
+            <td>
+                <div class="distance-table" id="{{ resultat.type_carburant }}">
+                     {{ resultat.type_carburant }}
+                </div>
+            </td>
+
+            <td>
+                <div class="distance-table">
+                    <i class="fa-solid fa-location-dot"></i> {{ resultat.prix }}
+                </div>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

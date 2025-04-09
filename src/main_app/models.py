@@ -57,6 +57,8 @@ class StationWithDiesel(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    marque = models.CharField(null=True)
+    id = models.CharField(null=True)
     days_difference = models.IntegerField()
 
     class Meta:
@@ -74,6 +76,8 @@ class StationWithSP95(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    marque = models.CharField(null=True)
+    id = models.CharField(null=True)
     days_difference = models.IntegerField()
 
     class Meta:
@@ -91,6 +95,8 @@ class StationWithSP98(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    marque = models.CharField(null=True)
+    id = models.CharField(null=True)
     days_difference = models.IntegerField()
 
     class Meta:
@@ -108,6 +114,8 @@ class StationWithGPL(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    marque = models.CharField(null=True)
+    id = models.CharField(null=True)
     days_difference = models.IntegerField()
 
     class Meta:
@@ -125,6 +133,8 @@ class StationWithE10(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    marque = models.CharField(null=True)
+    id = models.CharField(null=True)
     days_difference = models.IntegerField()
 
     class Meta:
@@ -142,6 +152,8 @@ class StationWithE85(models.Model):
     automate_24_24 = models.BooleanField()
     prix = models.FloatField(null=True)
     dat_maj = models.DateTimeField(null=True)
+    marque = models.CharField(null=True)
+    id = models.CharField(null=True)
     days_difference = models.IntegerField()
 
     class Meta:
@@ -192,6 +204,7 @@ class StationsCheaperByFuel(models.Model):
     ville = models.CharField(null=True)
     type_carburant = models.CharField()
     prix = models.FloatField(null=True)
+    marque = models.CharField(null=True)
     classement = models.IntegerField()
 
     class Meta:

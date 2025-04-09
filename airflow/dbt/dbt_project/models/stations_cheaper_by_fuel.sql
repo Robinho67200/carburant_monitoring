@@ -28,6 +28,7 @@ code_postal,
 ville,
 type_carburant,
 prix,
+marque,
 DENSE_RANK() OVER(PARTITION BY type_carburant ORDER BY prix) as classement
 FROM main_app_stations s
 LEFT JOIN last_information c ON c.station_id = s.id
