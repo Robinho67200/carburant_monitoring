@@ -21,17 +21,23 @@
                 <table class="carburant-table">
                     <thead>
                         <tr>
-                            <th>Ville</th>
-                            <th>Adresse</th>
+                            <th>Logo</th>
+                            <th>Nom</th>
                             <th>Prix</th>
                             <th>Date de mise à jour</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for resultat in top5_diesel %}
-                            <tr>
-                                <td>{{ resultat.ville }}</td>
-                                <td>{{ resultat.adresse }}</td>
+                            <tr onclick="window.location='{% url 'station' id=resultat.id %}'" class="clickable-row">
+                                <td>
+                                    <img src="/media/logo/{{ resultat.marque }}.png" alt="Logo {{ resultat.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
+                                </td>
+
+                                <td>
+                                    <div><strong>{{ resultat.marque }}</strong> — {{ resultat.ville }}</div>
+                                    <div class="adresse">{{ resultat.adresse }}</div>
+                                </td>
                                 <td>{{ resultat.prix }} €</td>
                                 {% if resultat.days_difference == 0 %}
                                     <td class="date-table" id="today">Aujourd'hui</td>
@@ -55,17 +61,23 @@
             <table class="carburant-table">
                 <thead>
                     <tr>
-                        <th>Ville</th>
-                        <th>Adresse</th>
+                        <th>Logo</th>
+                        <th>Nom</th>
                         <th>Prix</th>
                         <th>Date de mise à jour</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for resultat in top5_sp95 %}
-                        <tr>
-                            <td>{{ resultat.ville }}</td>
-                            <td>{{ resultat.adresse }}</td>
+                        <tr onclick="window.location='{% url 'station' id=resultat.id %}'" class="clickable-row">
+                            <td>
+                                <img src="/media/logo/{{ resultat.marque }}.png" alt="Logo {{ resultat.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
+                            </td>
+
+                            <td>
+                                <div><strong>{{ resultat.marque }}</strong> — {{ resultat.ville }}</div>
+                                <div class="adresse">{{ resultat.adresse }}</div>
+                            </td>
                             <td>{{ resultat.prix }} €</td>
                             {% if resultat.days_difference == 0 %}
                                 <td class="date-table" id="today">Aujourd'hui</td>
@@ -89,17 +101,23 @@
             <table class="carburant-table">
                 <thead>
                     <tr>
-                        <th>Ville</th>
-                        <th>Adresse</th>
+                        <th>Logo</th>
+                        <th>Nom</th>
                         <th>Prix</th>
                         <th>Date de mise à jour</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for resultat in top5_sp98 %}
-                        <tr>
-                            <td>{{ resultat.ville }}</td>
-                            <td>{{ resultat.adresse }}</td>
+                        <tr onclick="window.location='{% url 'station' id=resultat.id %}'" class="clickable-row">
+                            <td>
+                                <img src="/media/logo/{{ resultat.marque }}.png" alt="Logo {{ resultat.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
+                            </td>
+
+                            <td>
+                                <div><strong>{{ resultat.marque }}</strong> — {{ resultat.ville }}</div>
+                                <div class="adresse">{{ resultat.adresse }}</div>
+                            </td>
                             <td>{{ resultat.prix }} €</td>
                             {% if resultat.days_difference == 0 %}
                                 <td class="date-table" id="today">Aujourd'hui</td>
@@ -123,17 +141,23 @@
             <table class="carburant-table">
                 <thead>
                     <tr>
-                        <th>Ville</th>
-                        <th>Adresse</th>
+                        <th>Logo</th>
+                        <th>Nom</th>
                         <th>Prix</th>
                         <th>Date de mise à jour</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for resultat in top5_e85 %}
-                        <tr>
-                            <td>{{ resultat.ville }}</td>
-                            <td>{{ resultat.adresse }}</td>
+                        <tr onclick="window.location='{% url 'station' id=resultat.id %}'" class="clickable-row">
+                            <td>
+                                <img src="/media/logo/{{ resultat.marque }}.png" alt="Logo {{ resultat.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
+                            </td>
+
+                            <td>
+                                <div><strong>{{ resultat.marque }}</strong> — {{ resultat.ville }}</div>
+                                <div class="adresse">{{ resultat.adresse }}</div>
+                            </td>
                             <td>{{ resultat.prix }} €</td>
                             {% if resultat.days_difference == 0 %}
                                 <td class="date-table" id="today">Aujourd'hui</td>
@@ -157,17 +181,23 @@
             <table class="carburant-table">
                 <thead>
                     <tr>
-                        <th>Ville</th>
-                        <th>Adresse</th>
+                        <th>Logo</th>
+                        <th>Nom</th>
                         <th>Prix</th>
                         <th>Date de mise à jour</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for resultat in top5_e10 %}
-                        <tr>
-                            <td>{{ resultat.ville }}</td>
-                            <td>{{ resultat.adresse }}</td>
+                        <tr onclick="window.location='{% url 'station' id=resultat.id %}'" class="clickable-row">
+                            <td>
+                                <img src="/media/logo/{{ resultat.marque }}.png" alt="Logo {{ resultat.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
+                            </td>
+
+                            <td>
+                                <div><strong>{{ resultat.marque }}</strong> — {{ resultat.ville }}</div>
+                                <div class="adresse">{{ resultat.adresse }}</div>
+                            </td>
                             <td>{{ resultat.prix }} €</td>
                             {% if resultat.days_difference == 0 %}
                                 <td class="date-table" id="today">Aujourd'hui</td>
@@ -191,17 +221,23 @@
             <table class="carburant-table">
                 <thead>
                     <tr>
-                        <th>Ville</th>
-                        <th>Adresse</th>
+                        <th>Logo</th>
+                        <th>Nom</th>
                         <th>Prix</th>
                         <th>Date de mise à jour</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for resultat in top5_gpl %}
-                        <tr>
-                            <td>{{ resultat.ville }}</td>
-                            <td>{{ resultat.adresse }}</td>
+                        <tr onclick="window.location='{% url 'station' id=resultat.id %}'" class="clickable-row">
+                            <td>
+                                <img src="/media/logo/{{ resultat.marque }}.png" alt="Logo {{ resultat.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
+                            </td>
+
+                            <td>
+                                <div><strong>{{ resultat.marque }}</strong> — {{ resultat.ville }}</div>
+                                <div class="adresse">{{ resultat.adresse }}</div>
+                            </td>
                             <td>{{ resultat.prix }} €</td>
                             {% if resultat.days_difference == 0 %}
                                 <td class="date-table" id="today">Aujourd'hui</td>
@@ -233,7 +269,7 @@
 <table>
     <thead>
         <tr>
-            <th>Ville</th>
+            <th>Marque</th>
             <th>Adresse</th>
             <th>Prix Diesel</th>
             <th>Prix SP95</th>
@@ -246,9 +282,18 @@
     </thead>
     <tbody>
         {% for resultat in resultats %}
-        <tr>
-            <td><a href="{% url 'station' id=resultat.station.id %}">{{ resultat.station.ville }}</a></td>
-            <td>{{ resultat.station.adresse }}</td>
+
+        <tr onclick="window.location='{% url 'station' id=resultat.station.id %}'" class="clickable-row">
+<!--            <td><a href="{% url 'station' id=resultat.station.id %}">{{ resultat.station.marque }}</a></td>-->
+            <td>
+                <img src="/media/logo/{{ resultat.station.marque }}.png" alt="Logo {{ resultat.station.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
+            </td>
+<!--            <td>{{ resultat.station.adresse }} {{ resultat.station.ville }}</td>-->
+
+            <td>
+                <div><strong>{{ resultat.station.marque }}</strong> — {{ resultat.station.ville }}</div>
+                <div class="adresse">{{ resultat.station.adresse }}</div>
+            </td>
 
             <!-- Prix Diesel -->
             {% for prix in prix_carburants_station %}

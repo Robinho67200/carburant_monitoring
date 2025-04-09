@@ -17,6 +17,7 @@ h2 {
     font-weight: bold;
     color: #34495e;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 /* Liste des prix des carburants */
@@ -127,4 +128,9 @@ tr:hover {
     padding: 8px 12px;
     border-radius: 5px;
     font-weight: bold;
+}
+
+
+.image-logo {
+    width: 50px;
 }

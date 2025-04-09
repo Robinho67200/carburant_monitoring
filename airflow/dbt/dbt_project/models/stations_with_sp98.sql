@@ -18,6 +18,8 @@ SELECT
     s.automate_24_24,
     ld.prix,
     ld.dat_maj,
+    s.marque,
+    s.id,
     (CURRENT_DATE - ld.dat_maj::DATE) AS days_difference
 FROM main_app_stations s
 LEFT JOIN latest_sp98 ld ON s.id = ld.station_id_id

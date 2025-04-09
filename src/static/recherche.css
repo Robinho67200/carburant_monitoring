@@ -224,6 +224,17 @@ h1, h2, h3 {
 
 }
 
+.image-logo {
+    width: 50px;
+}
+
+.clickable-row {
+    cursor: pointer;
+}
+
+.clickable-row:hover {
+    background-color: #f5f5f5;
+}
 
 /* Styles responsives pour écrans plus petits */
 @media (max-width: 768px) {
