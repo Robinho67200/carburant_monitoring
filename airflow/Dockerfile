@@ -8,7 +8,7 @@ ENV PYTHONPATH="$PYTHONPATH:/usr/local/airflow/dags"
 # Installer git, cron et les dépendances dbt
 RUN apt-get update && apt-get install -y git cron && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip && pip install dbt-core dbt-postgres
+RUN pip install --upgrade pip && pip install wheel dbt-core dbt-postgres
 
 # Copier la configuration de la base de données
 COPY dbt/dbt_project/profiles/profiles.yml $AIRFLOW_HOME/dbt/profiles.yml
