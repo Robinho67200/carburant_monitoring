@@ -6,41 +6,43 @@
     {% endblock %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" media="print" onload="this.media='all'">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
 
-<header>
+<header class="header">
+    <div class="header-container">
+        <a href="{% url 'index'%}" class="logo">mon carburant.fr</a>
 
-<form id="adresseForm" action="{% url 'recherche' %}" method="get">
-    <label for="adresse"></label>
-    <input type="text" id="adresse" name="adresse" autocomplete="off" required placeholder="Indiquez votre ville ou votre code postal" value="{{ adresse }}">
+        <form id="adresseForm" action="{% url 'recherche' %}" method="get" class="search-form">
+            <label for="adresse"></label>
+            <input type="text" id="adresse" name="adresse" autocomplete="off" required
+                   placeholder="Indiquez votre ville ou votre code postal"
+                   value="{{ adresse }}">
 
-
-    {% if nb_km_max %}
-    <div class="range-container">
-        <label for="nb_km_max">Rayon</label>
-        <input type="range" id="nb_km_max" name="nb_km_max" min="5" max="40" step="1" value="{{ nb_km_max }}"
-               oninput="this.parentElement.querySelector('output').value = this.value; fetchNearbyStores()">
-        <span class="range-output"><output>{{ nb_km_max }}</output> km</span>
-        </div>
-
-    {% else %}
-        <div class="range-container">
-            <label for="nb_km_max">Rayon</label>
-                <input type="range" id="nb_km_max" name="nb_km_max" min="5" max="40" step="1" value="10"
-               oninput="this.parentElement.querySelector('output').value = this.value; fetchNearbyStores()">
-        <span class="range-output"><output>10</output> km</span>
-
+            {% if nb_km_max %}
+            <div class="range-container">
+                <label for="nb_km_max">Rayon</label>
+                <input type="range" id="nb_km_max" name="nb_km_max" min="5" max="40" step="1" value="{{ nb_km_max }}"
+                       oninput="this.parentElement.querySelector('output').value = this.value; fetchNearbyStores()">
+                <span class="range-output"><output>{{ nb_km_max }}</output> km</span>
             </div>
-    {% endif %}
+            {% else %}
+            <div class="range-container">
+                <label for="nb_km_max">Rayon</label>
+                <input type="range" id="nb_km_max" name="nb_km_max" min="5" max="40" step="1" value="10"
+                       oninput="this.parentElement.querySelector('output').value = this.value; fetchNearbyStores()">
+                <span class="range-output"><output>10</output> km</span>
+            </div>
+            {% endif %}
 
-        <button type="submit">🔍</button>
-</form>
-
-
+            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+    </div>
 </header>
+
 
 {% block content %}
 {% endblock %}
