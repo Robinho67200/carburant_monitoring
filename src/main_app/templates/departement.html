@@ -1,17 +1,68 @@
 {% extends 'base.html' %}
 
 {% block titre %}
-<title>Résultats de recherche</title>
+<title>Comparateur de carburants pour le département {{ departement }}</title>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'recherche.css' %}">
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- 📌 Inclure Plotly -->
 {% endblock %}
 
 
-{% block content %}
-    <h1>Résultats pour {{ adresse }} dans un rayon de {{ nb_km_max }} km</h1>
 
-    <h2>TOP 5 par carburant à proximité de {{ adresse }}</h2>
+{% block content %}
+
+    <div class="breadcrumb">
+      <a href="{% url 'index' %}">Accueil</a> >
+      <a href="{% url 'region' id=region %}">{{ region }}</a> >
+      {{ departement }}
+    </div>
+
+<h1>Les stations essence dans le département {{ departement }}</h1>
+
+    <h2>Prix moyen pour aujourd'hui dans le département : {{ departement }}</h2>
+
+<div class="moyenne_carburant">
+    <div class="moyenne" id="Diesel">
+        <span class="type_carburant">Diesel</span>
+        <span class="prix_moyen">{{ moyenne_prix_diesel }} €</span>
+    </div>
+
+    <div class="moyenne" id="SP95">
+        <span class="type_carburant">SP95</span>
+        <span class="prix_moyen">{{ moyenne_prix_sp95 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="SP98">
+        <span class="type_carburant">SP98</span>
+        <span class="prix_moyen">{{ moyenne_prix_sp98 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="E10">
+        <span class="type_carburant">E10</span>
+        <span class="prix_moyen">{{ moyenne_prix_e10 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="E85">
+        <span class="type_carburant">E85</span>
+        <span class="prix_moyen">{{ moyenne_prix_e85 }} €</span>
+
+    </div>
+
+    <div class="moyenne" id="GPL">
+        <span class="type_carburant">GPL</span>
+        <span class="prix_moyen">{{ moyenne_prix_gpl }} €</span>
+
+    </div>
+
+</div>
+
+
+
+
+    <h2>TOP 5 par carburant dans le département : {{ departement }}</h2>
 
     {% if top5_diesel != 0 %}
         <div class="top5-carburants">
@@ -256,204 +307,30 @@
 </div>
 
 
-    <br>
-    <br>
-    <br>
 
 
-    <h2>Les 10 stations les plus proches</h2>
-
-    {% if resultats %}
-    <div class="stations_proximite">
-<table>
-    <thead>
-        <tr>
-            <th>Marque</th>
-            <th>Adresse</th>
-            <th>Prix Diesel</th>
-            <th>Prix SP95</th>
-            <th>Prix SP98</th>
-            <th>Prix E85</th>
-            <th>Prix E10</th>
-            <th>Prix GPL</th>
-            <th>Distance (km)</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for resultat in resultats %}
-
-        <tr onclick="window.location='{% url 'station' id=resultat.station.id %}'" class="clickable-row">
-<!--            <td><a href="{% url 'station' id=resultat.station.id %}">{{ resultat.station.marque }}</a></td>-->
-            <td>
-                <img src="/media/logo/{{ resultat.station.marque }}.png" alt="Logo {{ resultat.station.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
-            </td>
-<!--            <td>{{ resultat.station.adresse }} {{ resultat.station.ville }}</td>-->
-
-            <td>
-                <div><strong>{{ resultat.station.marque }}</strong> — {{ resultat.station.ville }}</div>
-                <div class="adresse">{{ resultat.station.adresse }}</div>
-            </td>
-
-            <!-- Prix Diesel -->
-            {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "Diesel" %}
-                    <td>
-                        {% if prix.prix == 0.0 %}
-                            <p class="prix_carburant_stations_proximite" id="Diesel">-</p>
-                        {% else %}
-                            <p class="prix_carburant_stations_proximite" id="Diesel">{{ prix.prix }}</p>
-                        {% endif %}
-                    </td>
-                {% endif %}
-            {% endfor %}
-
-            <!-- Prix SP95 -->
-            {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "SP95" %}
-                    <td>
-                        {% if prix.prix == 0.0 %}
-                            <p class="prix_carburant_stations_proximite" id="SP95">-</p>
-                        {% else %}
-                            <p class="prix_carburant_stations_proximite" id="SP95">{{ prix.prix }}</p>
-                        {% endif %}
-                    </td>
-                {% endif %}
-            {% endfor %}
-
-            <!-- Prix SP98 -->
-            {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "SP98" %}
-                    <td>
-                        {% if prix.prix == 0.0 %}
-                            <p class="prix_carburant_stations_proximite" id="SP98">-</p>
-                        {% else %}
-                            <p class="prix_carburant_stations_proximite" id="SP98">{{ prix.prix }}</p>
-                        {% endif %}
-                    </td>
-                {% endif %}
-            {% endfor %}
-
-            <!-- Prix E85 -->
-            {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "E85" %}
-                    <td>
-                        {% if prix.prix == 0.0 %}
-                            <p class="prix_carburant_stations_proximite" id="E85">-</p>
-                        {% else %}
-                        <p class="prix_carburant_stations_proximite" id="E85">{{ prix.prix }}</p>
-
-                        {% endif %}
-                    </td>
-                {% endif %}
-            {% endfor %}
-
-            <!-- Prix E10 -->
-            {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "E10" %}
-                    <td>
-                        {% if prix.prix == 0.0 %}
-                            <p class="prix_carburant_stations_proximite" id="E10">-</p>
-                        {% else %}
-                            <p class="prix_carburant_stations_proximite" id="E10">{{ prix.prix }}</p>
-                        {% endif %}
-                    </td>
-                {% endif %}
-            {% endfor %}
-
-            <!-- Prix GPL -->
-            {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "GPL" %}
-                    <td>
-                        {% if prix.prix == 0.0 %}
-                            <p class="prix_carburant_stations_proximite" id="GPL">-</p>
-                        {% else %}
-                            <p class="prix_carburant_stations_proximite" id="GPL">{{ prix.prix }}</p>
-                        {% endif %}
-                    </td>
-                {% endif %}
-            {% endfor %}
-
-                <td>
-                    <div class="distance-table">
-                        <i class="fa-solid fa-location-dot"></i> {{ resultat.distance }} km
-                    </div>
-                </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 
 
+
+
+
+
+
+
+
+
+
+
+<h2>Évolution du prix par type de carburant dans le département : {{ departement }}</h2>
+    <div class="information">
+        <p>Pourquoi les prix moyen en France (en haut de la page) ne collent pas toujours avec la dernière valeur de la courbe ?
+        Eh bien, c’est parce qu’on regarde les choses sous deux angles différents 👀 !
+        Au-dessus, on prend la dernière info dispo pour chaque station (même si elle date d’il y a 3 jours 😴), alors que la courbe, elle, suit le prix le jour où l’info est apparue, comme un journal intime du carburant 📅⛽️
+        </p>
     </div>
-    {% endif %}
-
-
-
-
-
-    <h2>Data pour {{ adresse }} dans un rayon de {{ nb_km_max }} km</h2>
-
-    <h3>Prix moyen des carburants pour aujourd'hui</h3>
-
-<div class="moyenne_carburant">
-
-    {% if moyenne_prix_diesel != 0 %}
-        <div class="moyenne" id="Diesel">
-            <span class="type_carburant">Diesel</span>
-            <span class="prix_moyen">{{ moyenne_prix_diesel }} €</span>
-        </div>
-    {% endif %}
-
-    {% if moyenne_prix_sp95 != 0 %}
-        <div class="moyenne" id="SP95">
-            <span class="type_carburant">SP95</span>
-            <span class="prix_moyen">{{ moyenne_prix_sp95 }} €</span>
-        </div>
-    {% endif %}
-
-    {% if moyenne_prix_sp98 != 0 %}
-        <div class="moyenne" id="SP98">
-            <span class="type_carburant">SP98</span>
-            <span class="prix_moyen">{{ moyenne_prix_sp98 }} €</span>
-        </div>
-    {% endif %}
-
-    {% if moyenne_prix_e10 != 0 %}
-        <div class="moyenne" id="E10">
-            <span class="type_carburant">E10</span>
-            <span class="prix_moyen">{{ moyenne_prix_e10 }} €</span>
-        </div>
-    {% endif %}
-
-    {% if moyenne_prix_e85 != 0 %}
-        <div class="moyenne" id="E85">
-            <span class="type_carburant">E85</span>
-            <span class="prix_moyen">{{ moyenne_prix_e85 }} €</span>
-        </div>
-    {% endif %}
-
-    {% if moyenne_prix_gpl != 0 %}
-        <div class="moyenne" id="GPL">
-            <span class="type_carburant">GPL</span>
-            <span class="prix_moyen">{{ moyenne_prix_gpl }} €</span>
-        </div>
-    {% endif %}
-
-</div>
-
-
-{% if graph_html != 0 %}
-    <h3>Évolution du prix par type de carburant</h3>
-        <div class="information">
-            <p>Pourquoi les valeurs ci-dessus ne collent pas toujours avec la dernière valeur de la courbe ?
-            Eh bien, c’est parce qu’on regarde les choses sous deux angles différents 👀 !
-            Au-dessus, on prend la dernière info dispo pour chaque station (même si elle date d’il y a 3 jours 😴), alors que la courbe, elle, suit le prix le jour où l’info est apparue, comme un journal intime du carburant 📅⛽️
-            </p>
-        </div>
-        <div>
-            {{ graph_html|safe }}
-        </div>
-{% endif %}
-
+    <div>
+        {{ graph_html|safe }}
+    </div>
 
 {% endblock %}
+

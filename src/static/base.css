@@ -109,6 +109,36 @@ button {
 }
 
 
+.breadcrumb {
+    font-size: 0.95rem;
+    color: #444;
+    background-color: #f9f9f9;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.breadcrumb a {
+    color: #34495e;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+    color: #D0BC13;
+    font-weight: bold;
+}
+
+.breadcrumb span {
+    font-weight: bold;
+    color: #222;
+}
+
+
 
 /* Comportement sur petits écrans */
 @media (max-width: 1100px) {

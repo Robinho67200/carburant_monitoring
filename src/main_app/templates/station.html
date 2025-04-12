@@ -4,7 +4,6 @@
 <title>Station {{ station.id }}</title>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'station.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" media="print" onload="this.media='all'">
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock %}
 
@@ -15,6 +14,19 @@
 <div class="station-container">
 
     <img src="/media/logo/{{ station.marque }}.png" alt="Logo {{ station.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
+
+    <div class="breadcrumb">
+      <a href="{% url 'index' %}">Accueil</a> >
+      <a href="{% url 'region' id=station.nom_region %}">{{ station.nom_region }}</a> >
+      <a href="{% url 'departement' id=station.nom_departement %}">{{ station.nom_departement }}</a> >
+      <a href="{% url 'ville' id=station.ville %}">{{ station.ville }}</a> >
+
+        {% if station.marque == "Indépendant" %}
+            Station indépendante à {{ station.ville }}
+        {% else %}
+            Station {{ station.marque }} à {{ station.ville }}
+        {% endif %}
+    </div>
 
     {% if station.marque == "Indépendant" %}
         <h1>Station indépendante à {{ station.ville }}</h1>

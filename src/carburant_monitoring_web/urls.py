@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from main_app.views import index, recherche, station
+from main_app.views import index, recherche, station, departement, ville, region
 from carburant_monitoring_web import settings
 from django.conf.urls.static import static
 
@@ -26,4 +26,7 @@ urlpatterns = [
     path("", index, name="index"),
     path("recherche/", recherche, name="recherche"),
     path("station/<str:id>", station, name="station"),
+    path("departement/<str:id>", departement, name="departement"),
+    path("ville/<str:id>", ville, name="ville"),
+    path("region/<str:id>", region, name="region"),
 ]   + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

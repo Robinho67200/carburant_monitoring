@@ -414,3 +414,320 @@ def station(request, id) :
     context = {"station": station, 'services' : services.service, "carburants": carburants, "graph_html": graph_html}
 
     return render(request, "station.html", context)
+
+
+
+
+def region(request, id) :
+
+    # Récupérer tous les magasins de la base de données
+    all_stations = Stations.objects.filter(nom_region=id)
+
+
+    # # Récupérer la liste des ids de station
+    station_ids = [result.id for result in all_stations]
+
+    print(station_ids)
+
+    # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
+    stations_diesel = StationWithDiesel.objects.filter(station_id__in=station_ids)
+    moyenne_prix_diesel = round(stations_diesel.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
+    stations_sp95 = StationWithSP95.objects.filter(station_id__in=station_ids)
+    moyenne_prix_sp95 = round(stations_sp95.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_sp98 = StationWithSP98.objects.filter(station_id__in=station_ids)
+    moyenne_prix_sp98 = round(stations_sp98.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_e10 = StationWithE10.objects.filter(station_id__in=station_ids)
+    moyenne_prix_e10 = round(stations_e10.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_e85 = StationWithE85.objects.filter(station_id__in=station_ids)
+    moyenne_prix_e85 = round(stations_e85.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_gpl = StationWithGPL.objects.filter(station_id__in=station_ids)
+    moyenne_prix_gpl = round(stations_gpl.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    top5_diesel = stations_diesel.order_by('prix')[:5]
+    top5_sp95 = stations_sp95.order_by('prix')[:5]
+    top5_sp98 = stations_sp98.order_by('prix')[:5]
+    top5_e10 = stations_e10.order_by('prix')[:5]
+    top5_e85 = stations_e85.order_by('prix')[:5]
+    top5_gpl = stations_gpl.order_by('prix')[:5]
+
+
+
+
+    # Génération du graphique
+    carburants_graph = EvolutionOfNationalFuelPrices.objects.all().values(
+        "date_maj", "type_carburant", "prix_moyen"
+    )
+    df = pd.DataFrame(list(carburants_graph))
+    df["date_maj"] = pd.to_datetime(df["date_maj"])
+
+    fig = px.line(
+        df,
+        x="date_maj",
+        y="prix_moyen",
+        color="type_carburant",
+        markers=True,
+        labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
+    )
+
+    fig.update_layout(
+        xaxis_title="Date",
+        yaxis_title="Prix moyen (€)",
+        xaxis=dict(tickformat="%Y-%m-%d"),
+        hovermode="x unified",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+    )
+
+    graph_html = pio.to_html(fig, full_html=False)
+
+    context = {"stations": all_stations,
+               "region": id,
+               "moyenne_prix_diesel": moyenne_prix_diesel,
+               "moyenne_prix_sp95": moyenne_prix_sp95,
+               "moyenne_prix_sp98": moyenne_prix_sp98,
+               "moyenne_prix_e10": moyenne_prix_e10,
+               "moyenne_prix_e85": moyenne_prix_e85,
+               "moyenne_prix_gpl": moyenne_prix_gpl,
+               "graph_html": graph_html,
+               "top5_diesel": top5_diesel,
+               "top5_sp95": top5_sp95,
+               "top5_sp98": top5_sp98,
+               "top5_e10": top5_e10,
+               "top5_e85": top5_e85,
+               "top5_gpl": top5_gpl,
+               }
+
+    return render(request, "region.html", context)
+
+
+
+
+
+
+
+
+
+
+
+
+def departement(request, id) :
+
+    # Récupérer tous les magasins de la base de données
+    all_stations = Stations.objects.filter(nom_departement=id)
+
+    region = all_stations.first().nom_region
+
+    # # Récupérer la liste des ids de station
+    station_ids = [result.id for result in all_stations]
+
+    print(station_ids)
+
+    # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
+    stations_diesel = StationWithDiesel.objects.filter(station_id__in=station_ids)
+    moyenne_prix_diesel = round(stations_diesel.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
+    stations_sp95 = StationWithSP95.objects.filter(station_id__in=station_ids)
+    moyenne_prix_sp95 = round(stations_sp95.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_sp98 = StationWithSP98.objects.filter(station_id__in=station_ids)
+    moyenne_prix_sp98 = round(stations_sp98.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_e10 = StationWithE10.objects.filter(station_id__in=station_ids)
+    moyenne_prix_e10 = round(stations_e10.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_e85 = StationWithE85.objects.filter(station_id__in=station_ids)
+    moyenne_prix_e85 = round(stations_e85.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    stations_gpl = StationWithGPL.objects.filter(station_id__in=station_ids)
+    moyenne_prix_gpl = round(stations_gpl.aggregate(Avg("prix"))["prix__avg"], 2)
+
+    top5_diesel = stations_diesel.order_by('prix')[:5]
+    top5_sp95 = stations_sp95.order_by('prix')[:5]
+    top5_sp98 = stations_sp98.order_by('prix')[:5]
+    top5_e10 = stations_e10.order_by('prix')[:5]
+    top5_e85 = stations_e85.order_by('prix')[:5]
+    top5_gpl = stations_gpl.order_by('prix')[:5]
+
+
+
+
+    # Génération du graphique
+    carburants_graph = EvolutionOfNationalFuelPrices.objects.all().values(
+        "date_maj", "type_carburant", "prix_moyen"
+    )
+    df = pd.DataFrame(list(carburants_graph))
+    df["date_maj"] = pd.to_datetime(df["date_maj"])
+
+    fig = px.line(
+        df,
+        x="date_maj",
+        y="prix_moyen",
+        color="type_carburant",
+        markers=True,
+        labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
+    )
+
+    fig.update_layout(
+        xaxis_title="Date",
+        yaxis_title="Prix moyen (€)",
+        xaxis=dict(tickformat="%Y-%m-%d"),
+        hovermode="x unified",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+    )
+
+    graph_html = pio.to_html(fig, full_html=False)
+
+    context = {"stations": all_stations,
+               'region': region,
+               "departement": id,
+               "moyenne_prix_diesel": moyenne_prix_diesel,
+               "moyenne_prix_sp95": moyenne_prix_sp95,
+               "moyenne_prix_sp98": moyenne_prix_sp98,
+               "moyenne_prix_e10": moyenne_prix_e10,
+               "moyenne_prix_e85": moyenne_prix_e85,
+               "moyenne_prix_gpl": moyenne_prix_gpl,
+               "graph_html": graph_html,
+               "top5_diesel": top5_diesel,
+               "top5_sp95": top5_sp95,
+               "top5_sp98": top5_sp98,
+               "top5_e10": top5_e10,
+               "top5_e85": top5_e85,
+               "top5_gpl": top5_gpl,
+               }
+
+    return render(request, "departement.html", context)
+
+
+
+def ville(request, id) :
+
+    # Récupérer tous les magasins de la base de données
+    all_stations = Stations.objects.filter(ville=id)
+
+    region = all_stations.first().nom_region
+    departement = all_stations.first().nom_departement
+
+
+    # # Récupérer la liste des ids de station
+    station_ids = [result.id for result in all_stations]
+
+    print(station_ids)
+
+    # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
+    stations_diesel = StationWithDiesel.objects.filter(station_id__in=station_ids)
+    if stations_diesel :
+        moyenne_prix_diesel = round(stations_diesel.aggregate(Avg("prix"))["prix__avg"], 2)
+    else :
+        moyenne_prix_diesel = 0
+
+    # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
+    stations_sp95 = StationWithSP95.objects.filter(station_id__in=station_ids)
+    if stations_sp95 :
+        moyenne_prix_sp95 = round(stations_sp95.aggregate(Avg("prix"))["prix__avg"], 2)
+    else:
+        moyenne_prix_sp95 = 0
+
+    stations_sp98 = StationWithSP98.objects.filter(station_id__in=station_ids)
+    if stations_sp98 :
+        moyenne_prix_sp98 = round(stations_sp98.aggregate(Avg("prix"))["prix__avg"], 2)
+    else :
+        moyenne_prix_sp98 = 0
+
+    stations_e10 = StationWithE10.objects.filter(station_id__in=station_ids)
+    if stations_e10:
+        moyenne_prix_e10 = round(stations_e10.aggregate(Avg("prix"))["prix__avg"], 2)
+    else:
+        moyenne_prix_e10 = 0
+
+    stations_e85 = StationWithE85.objects.filter(station_id__in=station_ids)
+    if stations_e85 :
+        moyenne_prix_e85 = round(stations_e85.aggregate(Avg("prix"))["prix__avg"], 2)
+    else:
+        moyenne_prix_e85 = 0
+
+    stations_gpl = StationWithGPL.objects.filter(station_id__in=station_ids)
+    if stations_gpl :
+        moyenne_prix_gpl = round(stations_gpl.aggregate(Avg("prix"))["prix__avg"], 2)
+    else :
+        moyenne_prix_gpl = 0
+
+    top5_diesel = stations_diesel.order_by('prix')[:5]
+    if len(top5_diesel) == 0 :
+        top5_diesel = 0
+    top5_sp95 = stations_sp95.order_by('prix')[:5]
+    if len(top5_sp95) == 0 :
+        top5_sp95 = 0
+    top5_sp98 = stations_sp98.order_by('prix')[:5]
+    if len(top5_sp98) == 0 :
+        top5_sp98 = 0
+    top5_e10 = stations_e10.order_by('prix')[:5]
+    if len(top5_e10) == 0 :
+        top5_e10 = 0
+    top5_e85 = stations_e85.order_by('prix')[:5]
+    if len(top5_e85) == 0 :
+        top5_e85 = 0
+    top5_gpl = stations_gpl.order_by('prix')[:5]
+    if len(top5_gpl) == 0 :
+        top5_gpl = 0
+
+
+    prix_carburants_station = PriceCarburantsByStation.objects.filter(
+        station_id__in=station_ids
+    )
+
+    # Génération du graphique
+    carburants_graph = EvolutionOfNationalFuelPrices.objects.all().values(
+        "date_maj", "type_carburant", "prix_moyen"
+    )
+    df = pd.DataFrame(list(carburants_graph))
+    df["date_maj"] = pd.to_datetime(df["date_maj"])
+
+    fig = px.line(
+        df,
+        x="date_maj",
+        y="prix_moyen",
+        color="type_carburant",
+        markers=True,
+        labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
+    )
+
+    fig.update_layout(
+        xaxis_title="Date",
+        yaxis_title="Prix moyen (€)",
+        xaxis=dict(tickformat="%Y-%m-%d"),
+        hovermode="x unified",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+    )
+
+    graph_html = pio.to_html(fig, full_html=False)
+
+    context = {"stations": all_stations,
+               "ville": id,
+               "region": region,
+               "departement": departement,
+               "prix_carburants_station": prix_carburants_station,
+               "moyenne_prix_diesel": moyenne_prix_diesel,
+               "moyenne_prix_sp95": moyenne_prix_sp95,
+               "moyenne_prix_sp98": moyenne_prix_sp98,
+               "moyenne_prix_e10": moyenne_prix_e10,
+               "moyenne_prix_e85": moyenne_prix_e85,
+               "moyenne_prix_gpl": moyenne_prix_gpl,
+               "graph_html": graph_html,
+               "top5_diesel": top5_diesel,
+               "top5_sp95": top5_sp95,
+               "top5_sp98": top5_sp98,
+               "top5_e10": top5_e10,
+               "top5_e85": top5_e85,
+               "top5_gpl": top5_gpl,
+               }
+
+    return render(request, "ville.html", context)
