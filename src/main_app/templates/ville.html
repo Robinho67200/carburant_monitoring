@@ -8,10 +8,21 @@
 {% endblock %}
 
 
-{% block content %}
-    <h1>Résultats pour {{ adresse }} dans un rayon de {{ nb_km_max }} km</h1>
 
-    <h2>TOP 5 par carburant à proximité de {{ adresse }}</h2>
+
+{% block content %}
+
+    <div class="breadcrumb">
+      <a href="{% url 'index' %}">Accueil</a> >
+      <a href="{% url 'region' id=region %}">{{ region }}</a> >
+      <a href="{% url 'departement' id=departement %}">{{ departement }}</a> >
+      {{ ville }}
+    </div>
+
+
+    <h1>Les stations essence dans la ville de {{ ville }}</h1>
+
+    <h2>TOP 5 par carburant dans la ville de {{ ville }}</h2>
 
     {% if top5_diesel != 0 %}
         <div class="top5-carburants">
@@ -261,9 +272,9 @@
     <br>
 
 
-    <h2>Les 10 stations les plus proches</h2>
+    <h2>Les stations dans la ville de {{ ville }}</h2>
 
-    {% if resultats %}
+    {% if stations %}
     <div class="stations_proximite">
 <table>
     <thead>
@@ -276,27 +287,24 @@
             <th>Prix E85</th>
             <th>Prix E10</th>
             <th>Prix GPL</th>
-            <th>Distance (km)</th>
         </tr>
     </thead>
     <tbody>
-        {% for resultat in resultats %}
+        {% for resultat in stations %}
 
-        <tr onclick="window.location='{% url 'station' id=resultat.station.id %}'" class="clickable-row">
-<!--            <td><a href="{% url 'station' id=resultat.station.id %}">{{ resultat.station.marque }}</a></td>-->
+        <tr onclick="window.location='{% url 'station' id=resultat.id %}'" class="clickable-row">
             <td>
-                <img src="/media/logo/{{ resultat.station.marque }}.png" alt="Logo {{ resultat.station.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
+                <img src="/media/logo/{{ resultat.marque }}.png" alt="Logo {{ resultat.marque }}" class = "image-logo" onerror="this.onerror=null;this.src='/media/logo/Indépendant.png';" loading="lazy">
             </td>
-<!--            <td>{{ resultat.station.adresse }} {{ resultat.station.ville }}</td>-->
 
             <td>
-                <div><strong>{{ resultat.station.marque }}</strong> — {{ resultat.station.ville }}</div>
-                <div class="adresse">{{ resultat.station.adresse }}</div>
+                <div><strong>{{ resultat.marque }}</strong> — {{ resultat.ville }}</div>
+                <div class="adresse">{{ resultat.adresse }}</div>
             </td>
 
             <!-- Prix Diesel -->
             {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "Diesel" %}
+                {% if prix.station_id == resultat.id and prix.type_carburant == "Diesel" %}
                     <td>
                         {% if prix.prix == 0.0 %}
                             <p class="prix_carburant_stations_proximite" id="Diesel">-</p>
@@ -309,7 +317,7 @@
 
             <!-- Prix SP95 -->
             {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "SP95" %}
+                {% if prix.station_id == resultat.id and prix.type_carburant == "SP95" %}
                     <td>
                         {% if prix.prix == 0.0 %}
                             <p class="prix_carburant_stations_proximite" id="SP95">-</p>
@@ -322,7 +330,7 @@
 
             <!-- Prix SP98 -->
             {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "SP98" %}
+                {% if prix.station_id == resultat.id and prix.type_carburant == "SP98" %}
                     <td>
                         {% if prix.prix == 0.0 %}
                             <p class="prix_carburant_stations_proximite" id="SP98">-</p>
@@ -335,7 +343,7 @@
 
             <!-- Prix E85 -->
             {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "E85" %}
+                {% if prix.station_id == resultat.id and prix.type_carburant == "E85" %}
                     <td>
                         {% if prix.prix == 0.0 %}
                             <p class="prix_carburant_stations_proximite" id="E85">-</p>
@@ -349,7 +357,7 @@
 
             <!-- Prix E10 -->
             {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "E10" %}
+                {% if prix.station_id == resultat.id and prix.type_carburant == "E10" %}
                     <td>
                         {% if prix.prix == 0.0 %}
                             <p class="prix_carburant_stations_proximite" id="E10">-</p>
@@ -362,7 +370,7 @@
 
             <!-- Prix GPL -->
             {% for prix in prix_carburants_station %}
-                {% if prix.station_id == resultat.station.id and prix.type_carburant == "GPL" %}
+                {% if prix.station_id == resultat.id and prix.type_carburant == "GPL" %}
                     <td>
                         {% if prix.prix == 0.0 %}
                             <p class="prix_carburant_stations_proximite" id="GPL">-</p>
@@ -373,11 +381,6 @@
                 {% endif %}
             {% endfor %}
 
-                <td>
-                    <div class="distance-table">
-                        <i class="fa-solid fa-location-dot"></i> {{ resultat.distance }} km
-                    </div>
-                </td>
         </tr>
         {% endfor %}
     </tbody>
@@ -391,7 +394,7 @@
 
 
 
-    <h2>Data pour {{ adresse }} dans un rayon de {{ nb_km_max }} km</h2>
+    <h2>Data pour la ville de {{ ville }}</h2>
 
     <h3>Prix moyen des carburants pour aujourd'hui</h3>
 
