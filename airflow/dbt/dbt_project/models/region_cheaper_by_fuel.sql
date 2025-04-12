@@ -25,7 +25,7 @@ SELECT nom_region,
        ROUND(CAST(AVG(prix) AS NUMERIC), 3) AS prix_moyen
 FROM main_app_stations s
 LEFT JOIN last_information c ON c.station_id = s.id
-WHERE prix != 'nan' AND NOT nom_region IS NULL
+WHERE prix != 'nan' AND NOT nom_region IS NULL AND nom_region != 'NaN'
 GROUP BY nom_region, type_carburant
 )
 
