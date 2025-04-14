@@ -4,6 +4,13 @@
 <title>Station {{ station.id }}</title>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'station.css' %}">
+
+{% if station.marque == "Indépendant" %}
+    <meta name="description" content="Prix carburants à jour pour la station indépendante à {{ station.ville }} : SP95, E10, gazole... Horaires, adresse et carte pour y accéder facilement.">
+{% else %}
+    <meta name="description" content="Prix carburants à jour pour la station {{ station.marque }} à {{ station.ville }} : SP95, E10, gazole... Horaires, adresse et carte pour y accéder facilement.">
+{% endif %}
+
 {% endblock %}
 
 
