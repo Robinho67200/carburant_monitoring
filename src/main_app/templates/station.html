@@ -4,7 +4,6 @@
 <title>Station {{ station.id }}</title>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'station.css' %}">
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock %}
 
 
@@ -133,11 +132,11 @@
     {% endif %}
 
 
-    {% if graph_html != 0 %}
-    <h2>Évolution du prix par type de carburant dans cette station</h2>
-    <div>
-        {{ graph_html|safe }}
-    </div>
+    {% if graph_data != 0 %}
+        <h2>Évolution du prix par type de carburant dans cette station</h2>
+        <div>
+            <canvas id="carburantChart"></canvas>
+        </div>
     {% endif %}
 
 
@@ -151,8 +150,6 @@
         {% endfor %}
     </ul>
 </div>
-
-
 
 
 {% endblock %}

@@ -47,5 +47,49 @@
 {% block content %}
 {% endblock %}
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Récupérer les données JSON du backend
+        const data = {{ graph_data|safe }};
+
+        // Configurer le graphique
+        const config = {
+            type: 'line', // Type de graphique (ligne)
+            data: data,  // Les données envoyées depuis Django
+            options: {
+                responsive: true,
+                spanGaps: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    title: {
+                        display: false,
+                        text: 'Évolution du prix moyen par type de carburant',
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Prix moyen (€)'
+                        }
+                    }
+                }
+            }
+        };
+
+        // Créer le graphique
+        new Chart(document.getElementById('carburantChart'), config);
+    </script>
+
+
 </body>
 </html>
