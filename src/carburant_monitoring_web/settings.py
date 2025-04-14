@@ -23,7 +23,7 @@ PASSWORD = os.getenv("PASSWORD_CARBURANTS")
 HOST = os.getenv("HOST_CARBURANTS")
 PORT = os.getenv("PORT_CARBURANTS")
 
-HOST = "172.17.0.2"
+# HOST = "172.17.0.2"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -72,6 +72,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
