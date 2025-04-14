@@ -23,6 +23,8 @@ PASSWORD = os.getenv("PASSWORD_CARBURANTS")
 HOST = os.getenv("HOST_CARBURANTS")
 PORT = os.getenv("PORT_CARBURANTS")
 
+HOST = "172.17.0.2"
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -34,10 +36,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-otm%9e=#so4qbpeh+)km9y%#+k9sey0b#n3@g0=@*3fn83rfxw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ['ENV'] == 'DEV' :
-    DEBUG = True
-elif os.environ['ENV'] == 'PROD' :
-    DEBUG = False
+# if os.environ['ENV'] == 'DEV' :
+#     DEBUG = True
+# elif os.environ['ENV'] == 'PROD' :
+#     DEBUG = False
+
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -68,6 +72,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
