@@ -4,7 +4,6 @@
 <title>Résultats de recherche</title>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'recherche.css' %}">
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock %}
 
 
@@ -445,17 +444,18 @@
 </div>
 
 
-{% if graph_html != 0 %}
+{% if graph_data != 0 %}
     <h3>Évolution du prix par type de carburant</h3>
-        <div class="information">
-            <p>Pourquoi les valeurs ci-dessus ne collent pas toujours avec la dernière valeur de la courbe ?
-            Eh bien, c’est parce qu’on regarde les choses sous deux angles différents 👀 !
-            Au-dessus, on prend la dernière info dispo pour chaque station (même si elle date d’il y a 3 jours 😴), alors que la courbe, elle, suit le prix le jour où l’info est apparue, comme un journal intime du carburant 📅⛽️
-            </p>
-        </div>
-        <div>
-            {{ graph_html|safe }}
-        </div>
+    <div class="information">
+        <p>Pourquoi les prix moyen en France (en haut de la page) ne collent pas toujours avec la dernière valeur de la courbe ?
+        Eh bien, c’est parce qu’on regarde les choses sous deux angles différents 👀 !
+        Au-dessus, on prend la dernière info dispo pour chaque station (même si elle date d’il y a 3 jours 😴), alors que la courbe, elle, suit le prix le jour où l’info est apparue, comme un journal intime du carburant 📅⛽️
+        </p>
+    </div>
+
+    <div>
+        <canvas id="carburantChart"></canvas>
+    </div>
 {% endif %}
 
 

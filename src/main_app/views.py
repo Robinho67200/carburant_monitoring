@@ -1,16 +1,14 @@
-from django.shortcuts import render
-
 # Create your views here.
 
 # views.py
-
 
 import requests
 from geopy.distance import geodesic
 from django.db.models import Avg
 from django.http import JsonResponse
 from django.shortcuts import render
-import plotly.io as pio
+import pandas as pd
+import json
 
 from .models import (
     Stations,
@@ -23,6 +21,51 @@ from .models import (
     StationsCheaperByFuel, EvolutionOfNationalFuelPrices, EvolutionOfStationFuelPrices,
 )
 
+def generation_graphique(carburants_graph):
+    try :
+        df = pd.DataFrame(list(carburants_graph))
+
+        # Convertir la date
+        df["date_maj"] = pd.to_datetime(df["date_maj"]).dt.strftime("%Y-%m-%d")
+
+        # Pivot pour obtenir un tableau date x carburant
+        df = df.pivot_table(index="date_maj", columns="type_carburant", values="prix_moyen")
+
+        # S'assurer que toutes les dates sont là
+        labels = df.index.tolist()
+
+        color_map = {
+            "Diesel": "#D0BC13",
+            "SP95": "#95D600",
+            "SP98": "#3F6843",
+            "E10": "#3F6843",
+            "E85": "#109589",
+            "GPL": "#34495e",
+        }
+
+        datasets = []
+
+        for carburant in df.columns:
+            prix = df[carburant].tolist()  # Va contenir des None si valeur manquante
+
+            datasets.append({
+                "label": carburant,
+                "data": prix,
+                "borderColor": color_map.get(carburant, "rgba(0,0,0,1)"),
+                "backgroundColor": color_map.get(carburant, "rgba(0,0,0,0.2)"),
+                "fill": False,
+            })
+
+        graph_data = {
+            "labels": labels,
+            "datasets": datasets,
+        }
+
+    except Exception as e:
+        print(e)
+        graph_data = 0
+
+    return graph_data
 
 def geocode_address(adresse: str):
     """
@@ -176,10 +219,6 @@ def fetch_nearby_stations(request, adresse, nb_km_max):
 
     return nearby_stores
 
-
-import plotly.express as px
-import pandas as pd
-
 def index(request):
     """
     Vue de la page d'accueil
@@ -220,32 +259,11 @@ def index(request):
 
     stations_cheaper = StationsCheaperByFuel.objects.all()
 
-    # Génération du graphique
-    carburants_graph = EvolutionOfNationalFuelPrices.objects.all().values(
-        "date_maj", "type_carburant", "prix_moyen"
-    )
-    df = pd.DataFrame(list(carburants_graph))
-    df["date_maj"] = pd.to_datetime(df["date_maj"])
 
-    fig = px.line(
-        df,
-        x="date_maj",
-        y="prix_moyen",
-        color="type_carburant",
-        markers=True,
-        labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
-    )
+    # Création du graphique
+    carburants_graph = EvolutionOfNationalFuelPrices.objects.all().values("date_maj", "type_carburant", "prix_moyen")
 
-    fig.update_layout(
-        xaxis_title="Date",
-        yaxis_title="Prix moyen (€)",
-        xaxis=dict(tickformat="%Y-%m-%d"),
-        hovermode="x unified",
-        paper_bgcolor="white",
-        plot_bgcolor="white",
-    )
-
-    graph_html = pio.to_html(fig, full_html=False)
+    graph_data = generation_graphique(carburants_graph)
 
     context = {"stations": all_stations,
                "moyenne_prix_diesel": moyenne_prix_diesel,
@@ -261,7 +279,7 @@ def index(request):
                "classement_e85": classement_e85,
                "classement_gpl": classement_gpl,
                "stations_cheaper": stations_cheaper,
-               "graph_html": graph_html
+               "graph_data": json.dumps(graph_data),
                }
 
     return render(request, "index.html", context)
@@ -299,46 +317,14 @@ def recherche(request):
         station_id__in=station_ids
     )
 
-    try :
-        # Génération du graphique
-        carburants_graph = EvolutionOfStationFuelPrices.objects.filter(
-            station_id__in=station_ids
-        ).values(
-            "date_maj", "type_carburant", "prix_moyen"
-        )
-        df = pd.DataFrame(list(carburants_graph))
-        df["date_maj"] = pd.to_datetime(df["date_maj"])
+    # Génération du graphique
+    carburants_graph = EvolutionOfStationFuelPrices.objects.filter(
+        station_id__in=station_ids
+    ).values(
+        "date_maj", "type_carburant", "prix_moyen"
+    )
 
-        df = (
-            df
-            .groupby(["type_carburant", "date_maj"])
-            ["prix_moyen"].mean()
-            .reset_index()
-        )
-
-        fig = px.line(
-            df,
-            x="date_maj",
-            y="prix_moyen",
-            color="type_carburant",
-            markers=True,
-            labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
-        )
-
-        fig.update_layout(
-            xaxis_title="Date",
-            yaxis_title="Prix moyen (€)",
-            xaxis=dict(tickformat="%Y-%m-%d"),
-            hovermode="x unified",
-            paper_bgcolor="white",
-            plot_bgcolor="white",
-        )
-
-        graph_html = pio.to_html(fig, full_html=False)
-
-    except Exception as e:
-        print(e)
-        graph_html = 0
+    graph_data = generation_graphique(carburants_graph)
 
     return render(
         request,
@@ -360,7 +346,7 @@ def recherche(request):
             "moyenne_prix_e10": moyenne_prix_e10,
             "moyenne_prix_e85": moyenne_prix_e85,
             "moyenne_prix_gpl": moyenne_prix_gpl,
-            "graph_html" : graph_html
+            "graph_data": json.dumps(graph_data)
         },
     )
 
@@ -377,41 +363,17 @@ def station(request, id) :
         station_id=station.id
     )
 
-    try :
-        # Génération du graphique
-        carburants_graph = EvolutionOfStationFuelPrices.objects.filter(
+    # Création du graphique
+    carburants_graph = EvolutionOfStationFuelPrices.objects.filter(
             station_id=station.id
         ).values(
             "date_maj", "type_carburant", "prix_moyen"
         )
-        df = pd.DataFrame(list(carburants_graph))
-        df["date_maj"] = pd.to_datetime(df["date_maj"])
 
-        fig = px.line(
-            df,
-            x="date_maj",
-            y="prix_moyen",
-            color="type_carburant",
-            markers=True,
-            labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
-        )
-
-        fig.update_layout(
-            xaxis_title="Date",
-            yaxis_title="Prix moyen (€)",
-            xaxis=dict(tickformat="%Y-%m-%d"),
-            hovermode="x unified",
-            paper_bgcolor="white",
-            plot_bgcolor="white",
-        )
-
-        graph_html = pio.to_html(fig, full_html=False)
-
-    except :
-        graph_html = 0
+    graph_data = generation_graphique(carburants_graph)
 
     # Ajouter le total du panier au contexte
-    context = {"station": station, 'services' : services.service, "carburants": carburants, "graph_html": graph_html}
+    context = {"station": station, 'services' : services.service, "carburants": carburants, "graph_data": json.dumps(graph_data)}
 
     return render(request, "station.html", context)
 
@@ -456,35 +418,14 @@ def region(request, id) :
     top5_e85 = stations_e85.order_by('prix')[:5]
     top5_gpl = stations_gpl.order_by('prix')[:5]
 
-
-
-
     # Génération du graphique
-    carburants_graph = EvolutionOfNationalFuelPrices.objects.all().values(
+    carburants_graph = EvolutionOfStationFuelPrices.objects.filter(
+        station_id__in=station_ids
+    ).values(
         "date_maj", "type_carburant", "prix_moyen"
     )
-    df = pd.DataFrame(list(carburants_graph))
-    df["date_maj"] = pd.to_datetime(df["date_maj"])
 
-    fig = px.line(
-        df,
-        x="date_maj",
-        y="prix_moyen",
-        color="type_carburant",
-        markers=True,
-        labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
-    )
-
-    fig.update_layout(
-        xaxis_title="Date",
-        yaxis_title="Prix moyen (€)",
-        xaxis=dict(tickformat="%Y-%m-%d"),
-        hovermode="x unified",
-        paper_bgcolor="white",
-        plot_bgcolor="white",
-    )
-
-    graph_html = pio.to_html(fig, full_html=False)
+    graph_data = generation_graphique(carburants_graph)
 
     context = {"stations": all_stations,
                "region": id,
@@ -494,7 +435,7 @@ def region(request, id) :
                "moyenne_prix_e10": moyenne_prix_e10,
                "moyenne_prix_e85": moyenne_prix_e85,
                "moyenne_prix_gpl": moyenne_prix_gpl,
-               "graph_html": graph_html,
+               "graph_data": json.dumps(graph_data),
                "top5_diesel": top5_diesel,
                "top5_sp95": top5_sp95,
                "top5_sp98": top5_sp98,
@@ -504,16 +445,6 @@ def region(request, id) :
                }
 
     return render(request, "region.html", context)
-
-
-
-
-
-
-
-
-
-
 
 
 def departement(request, id) :
@@ -526,7 +457,6 @@ def departement(request, id) :
     # # Récupérer la liste des ids de station
     station_ids = [result.id for result in all_stations]
 
-    print(station_ids)
 
     # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
     stations_diesel = StationWithDiesel.objects.filter(station_id__in=station_ids)
@@ -556,34 +486,14 @@ def departement(request, id) :
     top5_gpl = stations_gpl.order_by('prix')[:5]
 
 
-
-
     # Génération du graphique
-    carburants_graph = EvolutionOfNationalFuelPrices.objects.all().values(
+    carburants_graph = EvolutionOfStationFuelPrices.objects.filter(
+        station_id__in=station_ids
+    ).values(
         "date_maj", "type_carburant", "prix_moyen"
     )
-    df = pd.DataFrame(list(carburants_graph))
-    df["date_maj"] = pd.to_datetime(df["date_maj"])
 
-    fig = px.line(
-        df,
-        x="date_maj",
-        y="prix_moyen",
-        color="type_carburant",
-        markers=True,
-        labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
-    )
-
-    fig.update_layout(
-        xaxis_title="Date",
-        yaxis_title="Prix moyen (€)",
-        xaxis=dict(tickformat="%Y-%m-%d"),
-        hovermode="x unified",
-        paper_bgcolor="white",
-        plot_bgcolor="white",
-    )
-
-    graph_html = pio.to_html(fig, full_html=False)
+    graph_data = generation_graphique(carburants_graph)
 
     context = {"stations": all_stations,
                'region': region,
@@ -594,7 +504,7 @@ def departement(request, id) :
                "moyenne_prix_e10": moyenne_prix_e10,
                "moyenne_prix_e85": moyenne_prix_e85,
                "moyenne_prix_gpl": moyenne_prix_gpl,
-               "graph_html": graph_html,
+               "graph_data": json.dumps(graph_data),
                "top5_diesel": top5_diesel,
                "top5_sp95": top5_sp95,
                "top5_sp98": top5_sp98,
@@ -684,31 +594,13 @@ def ville(request, id) :
     )
 
     # Génération du graphique
-    carburants_graph = EvolutionOfNationalFuelPrices.objects.all().values(
+    carburants_graph = EvolutionOfStationFuelPrices.objects.filter(
+        station_id__in=station_ids
+    ).values(
         "date_maj", "type_carburant", "prix_moyen"
     )
-    df = pd.DataFrame(list(carburants_graph))
-    df["date_maj"] = pd.to_datetime(df["date_maj"])
 
-    fig = px.line(
-        df,
-        x="date_maj",
-        y="prix_moyen",
-        color="type_carburant",
-        markers=True,
-        labels={"date_maj": "Date", "prix_moyen": "Prix moyen (€)", "type_carburant": "Carburant"},
-    )
-
-    fig.update_layout(
-        xaxis_title="Date",
-        yaxis_title="Prix moyen (€)",
-        xaxis=dict(tickformat="%Y-%m-%d"),
-        hovermode="x unified",
-        paper_bgcolor="white",
-        plot_bgcolor="white",
-    )
-
-    graph_html = pio.to_html(fig, full_html=False)
+    graph_data = generation_graphique(carburants_graph)
 
     context = {"stations": all_stations,
                "ville": id,
@@ -721,7 +613,7 @@ def ville(request, id) :
                "moyenne_prix_e10": moyenne_prix_e10,
                "moyenne_prix_e85": moyenne_prix_e85,
                "moyenne_prix_gpl": moyenne_prix_gpl,
-               "graph_html": graph_html,
+               "graph_data": json.dumps(graph_data),
                "top5_diesel": top5_diesel,
                "top5_sp95": top5_sp95,
                "top5_sp98": top5_sp98,

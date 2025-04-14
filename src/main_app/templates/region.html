@@ -4,7 +4,6 @@
 <title>Comparateur de carburants pour la région {{ region }}</title>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'recherche.css' %}">
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- 📌 Inclure Plotly -->
 {% endblock %}
 
 
@@ -306,21 +305,7 @@
     {% endif %}
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{% if graph_data != 0 %}
 <h2>Évolution du prix par type de carburant dans la région : {{ region }}</h2>
     <div class="information">
         <p>Pourquoi les prix moyen en France (en haut de la page) ne collent pas toujours avec la dernière valeur de la courbe ?
@@ -328,9 +313,11 @@
         Au-dessus, on prend la dernière info dispo pour chaque station (même si elle date d’il y a 3 jours 😴), alors que la courbe, elle, suit le prix le jour où l’info est apparue, comme un journal intime du carburant 📅⛽️
         </p>
     </div>
+
     <div>
-        {{ graph_html|safe }}
+        <canvas id="carburantChart"></canvas>
     </div>
+{% endif %}
 
 {% endblock %}
 
