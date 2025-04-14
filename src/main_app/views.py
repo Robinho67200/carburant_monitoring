@@ -385,38 +385,68 @@ def region(request, id) :
     # Récupérer tous les magasins de la base de données
     all_stations = Stations.objects.filter(nom_region=id)
 
-
     # # Récupérer la liste des ids de station
     station_ids = [result.id for result in all_stations]
 
-    print(station_ids)
-
     # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
-    stations_diesel = StationWithDiesel.objects.filter(station_id__in=station_ids)
-    moyenne_prix_diesel = round(stations_diesel.aggregate(Avg("prix"))["prix__avg"], 2)
+    stations_diesel = StationWithDiesel.objects.filter(
+        station_id__in=station_ids
+    )
+    if stations_diesel :
+        moyenne_prix_diesel = round(stations_diesel.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        top5_diesel = stations_diesel.order_by("prix")[:5]
+    else :
+        moyenne_prix_diesel = 0
+        top5_diesel = 0
 
     # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
     stations_sp95 = StationWithSP95.objects.filter(station_id__in=station_ids)
-    moyenne_prix_sp95 = round(stations_sp95.aggregate(Avg("prix"))["prix__avg"], 2)
+    if stations_sp95 :
+        moyenne_prix_sp95 = round(stations_sp95.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        top5_sp95 = stations_sp95.order_by("prix")[:5]
+    else :
+        moyenne_prix_sp95 = 0
+        top5_sp95 = 0
 
     stations_sp98 = StationWithSP98.objects.filter(station_id__in=station_ids)
-    moyenne_prix_sp98 = round(stations_sp98.aggregate(Avg("prix"))["prix__avg"], 2)
+    if stations_sp98 :
+        moyenne_prix_sp98 = round(stations_sp98.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        top5_sp98 = stations_sp98.order_by("prix")[:5]
+    else :
+        moyenne_prix_sp98 = 0
+        top5_sp98 = 0
+
 
     stations_e10 = StationWithE10.objects.filter(station_id__in=station_ids)
-    moyenne_prix_e10 = round(stations_e10.aggregate(Avg("prix"))["prix__avg"], 2)
+    if stations_e10 :
+        moyenne_prix_e10 = round(stations_e10.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        top5_e10 = stations_e10.order_by("prix")[:5]
+    else :
+        moyenne_prix_e10 = 0
+        top5_e10 = 0
 
     stations_e85 = StationWithE85.objects.filter(station_id__in=station_ids)
-    moyenne_prix_e85 = round(stations_e85.aggregate(Avg("prix"))["prix__avg"], 2)
+    if stations_e85 :
+        moyenne_prix_e85 = round(stations_e85.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        top5_e85 = stations_e85.order_by("prix")[:5]
+    else :
+        moyenne_prix_e85 = 0
+        top5_e85 = 0
 
     stations_gpl = StationWithGPL.objects.filter(station_id__in=station_ids)
-    moyenne_prix_gpl = round(stations_gpl.aggregate(Avg("prix"))["prix__avg"], 2)
+    if stations_gpl :
+        moyenne_prix_gpl = round(stations_gpl.aggregate(Avg("prix"))["prix__avg"], 2)
+        # Trier par prix du Diesel (les 5 moins chères)
+        top5_gpl = stations_gpl.order_by("prix")[:5]
+    else :
+        moyenne_prix_gpl = 0
+        top5_gpl = 0
 
-    top5_diesel = stations_diesel.order_by('prix')[:5]
-    top5_sp95 = stations_sp95.order_by('prix')[:5]
-    top5_sp98 = stations_sp98.order_by('prix')[:5]
-    top5_e10 = stations_e10.order_by('prix')[:5]
-    top5_e85 = stations_e85.order_by('prix')[:5]
-    top5_gpl = stations_gpl.order_by('prix')[:5]
 
     # Génération du graphique
     carburants_graph = EvolutionOfStationFuelPrices.objects.filter(
