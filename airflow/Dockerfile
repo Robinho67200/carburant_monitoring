@@ -1,20 +1,25 @@
-FROM python:3.10
+FROM python:3.12-slim
 
 # Définir les variables d'environnement pour Airflow
 ENV AIRFLOW_HOME=/usr/local/airflow
-ENV AIRFLOW_VERSION=2.5.3
+ENV AIRFLOW_VERSION=2.9.0
 ENV PYTHONPATH="$PYTHONPATH:/usr/local/airflow/dags"
 
 # Installer git, cron et les dépendances dbt
 RUN apt-get update && apt-get install -y git cron && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+    && update-ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade pip certifi
 
 RUN pip install --upgrade pip \
     && pip install --upgrade wheel setuptools
 
 RUN pip install daff
 
-RUN pip install dbt-core dbt-postgres
-
+RUN pip install dbt-core && pip install dbt-postgres
 
 # Copier la configuration de la base de données
 COPY dbt/dbt_project/profiles/profiles.yml $AIRFLOW_HOME/dbt/profiles.yml
@@ -39,7 +44,7 @@ COPY dags $AIRFLOW_HOME/dags
 
 # Installer Airflow
 RUN pip install apache-airflow==${AIRFLOW_VERSION} \
-    --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-3.9.txt"
+    --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-3.12.txt"
 
 # Installer les dépendances supplémentaires
 RUN pip install pytz
@@ -49,6 +54,8 @@ RUN pip install --upgrade typing_extensions
 
 # Créer un utilisateur Airflow
 RUN useradd -ms /bin/bash airflow
+
+RUN pip install dbt-core && pip install dbt-postgres
 
 # Changer le répertoire de travail
 WORKDIR $AIRFLOW_HOME
