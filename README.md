@@ -4,7 +4,7 @@
 
 [![Watch the video](https://img.youtube.com/vi/8e9nn5UQJIk/maxresdefault.jpg)](https://youtu.be/8e9nn5UQJIk)
 
-### [Watch this video on YouTube](https://youtu.be/8e9nn5UQJIk)
+### [Regarder cette vidéo sur YouTube](https://youtu.be/8e9nn5UQJIk)
 
 
 ## Présentation du projet
