@@ -225,28 +225,24 @@ def index(request):
     :param request:
     :return:
     """
-    # Récupérer tous les magasins de la base de données
-    all_stations = Stations.objects.all()
-
-
     # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
-    stations_diesel = StationWithDiesel.objects.all()
+    stations_diesel = StationWithDiesel.objects.only("prix")
     moyenne_prix_diesel = round(stations_diesel.aggregate(Avg("prix"))["prix__avg"], 2)
 
     # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
-    stations_sp95 = StationWithSP95.objects.all()
+    stations_sp95 = StationWithSP95.objects.only("prix")
     moyenne_prix_sp95 = round(stations_sp95.aggregate(Avg("prix"))["prix__avg"], 2)
 
-    stations_sp98 = StationWithSP98.objects.all()
+    stations_sp98 = StationWithSP98.objects.only("prix")
     moyenne_prix_sp98 = round(stations_sp98.aggregate(Avg("prix"))["prix__avg"], 2)
 
-    stations_e10 = StationWithE10.objects.all()
+    stations_e10 = StationWithE10.objects.only("prix")
     moyenne_prix_e10 = round(stations_e10.aggregate(Avg("prix"))["prix__avg"], 2)
 
-    stations_e85 = StationWithE85.objects.all()
+    stations_e85 = StationWithE85.objects.only("prix")
     moyenne_prix_e85 = round(stations_e85.aggregate(Avg("prix"))["prix__avg"], 2)
 
-    stations_gpl = StationWithGPL.objects.all()
+    stations_gpl = StationWithGPL.objects.only("prix")
     moyenne_prix_gpl = round(stations_gpl.aggregate(Avg("prix"))["prix__avg"], 2)
 
 
@@ -265,8 +261,7 @@ def index(request):
 
     graph_data = generation_graphique(carburants_graph)
 
-    context = {"stations": all_stations,
-               "moyenne_prix_diesel": moyenne_prix_diesel,
+    context = {"moyenne_prix_diesel": moyenne_prix_diesel,
                "moyenne_prix_sp95": moyenne_prix_sp95,
                "moyenne_prix_sp98": moyenne_prix_sp98,
                "moyenne_prix_e10": moyenne_prix_e10,
