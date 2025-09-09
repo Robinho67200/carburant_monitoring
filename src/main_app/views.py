@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 import pandas as pd
 import json
+import time
 
 from .models import (
     Stations,
@@ -18,7 +19,7 @@ from .models import (
     StationWithE10,
     StationWithE85,
     StationWithGPL, Services, Carburants, LastReadingStationFuel, PriceCarburantsByStation, RegionCheaperByFuel,
-    StationsCheaperByFuel, EvolutionOfNationalFuelPrices, EvolutionOfStationFuelPrices,
+    StationsCheaperByFuel, EvolutionOfNationalFuelPrices, EvolutionOfStationFuelPrices, AvgPricesByFuel
 )
 
 def generation_graphique(carburants_graph):
@@ -219,32 +220,23 @@ def fetch_nearby_stations(request, adresse, nb_km_max):
 
     return nearby_stores
 
+
 def index(request):
     """
     Vue de la page d'accueil
     :param request:
     :return:
     """
-    # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
-    stations_diesel = StationWithDiesel.objects.only("prix")
-    moyenne_prix_diesel = round(stations_diesel.aggregate(Avg("prix"))["prix__avg"], 2)
+    # Récupérer toutes les valeurs sous forme de dictionnaire
+    avg_prices = {item.type_carburant: float(item.avg_price) for item in AvgPricesByFuel.objects.all()}
 
-    # Filtrer les stations Diesel en ne gardant que celles présentes dans nearby_stores
-    stations_sp95 = StationWithSP95.objects.only("prix")
-    moyenne_prix_sp95 = round(stations_sp95.aggregate(Avg("prix"))["prix__avg"], 2)
-
-    stations_sp98 = StationWithSP98.objects.only("prix")
-    moyenne_prix_sp98 = round(stations_sp98.aggregate(Avg("prix"))["prix__avg"], 2)
-
-    stations_e10 = StationWithE10.objects.only("prix")
-    moyenne_prix_e10 = round(stations_e10.aggregate(Avg("prix"))["prix__avg"], 2)
-
-    stations_e85 = StationWithE85.objects.only("prix")
-    moyenne_prix_e85 = round(stations_e85.aggregate(Avg("prix"))["prix__avg"], 2)
-
-    stations_gpl = StationWithGPL.objects.only("prix")
-    moyenne_prix_gpl = round(stations_gpl.aggregate(Avg("prix"))["prix__avg"], 2)
-
+    # Exemple d’accès
+    moyenne_prix_diesel = avg_prices.get("Diesel")
+    moyenne_prix_e10 = avg_prices.get("E10")
+    moyenne_prix_e85 = avg_prices.get("E85")
+    moyenne_prix_sp95 = avg_prices.get("SP95")
+    moyenne_prix_sp98 = avg_prices.get("SP98")
+    moyenne_prix_gpl = avg_prices.get("GPL")
 
     classement_diesel = RegionCheaperByFuel.objects.filter(type_carburant="Diesel")
     classement_sp95 = RegionCheaperByFuel.objects.filter(type_carburant="SP95")
@@ -255,10 +247,8 @@ def index(request):
 
     stations_cheaper = StationsCheaperByFuel.objects.all()
 
-
     # Création du graphique
     carburants_graph = EvolutionOfNationalFuelPrices.objects.all().values("date_maj", "type_carburant", "prix_moyen")
-
     graph_data = generation_graphique(carburants_graph)
 
     context = {"moyenne_prix_diesel": moyenne_prix_diesel,

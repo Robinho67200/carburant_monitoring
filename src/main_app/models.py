@@ -141,6 +141,13 @@ class StationWithE10(models.Model):
         managed = False
         db_table = "stations_with_e10"
 
+class AvgPricesByFuel(models.Model):
+    type_carburant = models.CharField(primary_key=True)
+    avg_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        managed = False
+        db_table = "avg_prices_by_fuel"
 
 class StationWithE85(models.Model):
     station_id = models.CharField(primary_key=True)
