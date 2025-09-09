@@ -6,7 +6,7 @@ WITH ranking_by_station_carburant AS (
         dat_maj,
         ROW_NUMBER() OVER (PARTITION BY station_id_id, type_carburant ORDER BY dat_maj DESC) AS rn
     FROM main_app_carburants
-    WHERE prix != 'nan'
+    WHERE prix != 'nan' AND (CURRENT_DATE - dat_maj::date) <= 4
 ),
 
 last_information AS

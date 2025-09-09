@@ -5,7 +5,7 @@ WITH latest_gpl AS (
         dat_maj,
         ROW_NUMBER() OVER (PARTITION BY station_id_id ORDER BY dat_maj DESC) AS rn
     FROM main_app_carburants
-    WHERE type_carburant = 'GPL' AND prix != 'nan'
+    WHERE type_carburant = 'GPL' AND prix != 'nan' AND (CURRENT_DATE - dat_maj::date) <= 4
 )
 
 SELECT
