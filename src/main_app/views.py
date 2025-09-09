@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 import pandas as pd
 import json
-import time
+from django.views.decorators.cache import cache_page
 
 from .models import (
     Stations,
@@ -220,7 +220,7 @@ def fetch_nearby_stations(request, adresse, nb_km_max):
 
     return nearby_stores
 
-
+@cache_page(60 * 60)
 def index(request):
     """
     Vue de la page d'accueil
@@ -336,7 +336,7 @@ def recherche(request):
     )
 
 
-
+@cache_page(60 * 60)
 def station(request, id) :
     # Récupérer tous les magasins de la base de données
     station = Stations.objects.filter(id=id).first()
@@ -364,7 +364,7 @@ def station(request, id) :
 
 
 
-
+@cache_page(60 * 60)
 def region(request, id) :
 
     # Récupérer tous les magasins de la base de données
@@ -461,7 +461,7 @@ def region(request, id) :
 
     return render(request, "region.html", context)
 
-
+@cache_page(60 * 60)
 def departement(request, id) :
 
     # Récupérer tous les magasins de la base de données
@@ -531,7 +531,7 @@ def departement(request, id) :
     return render(request, "departement.html", context)
 
 
-
+@cache_page(60 * 60)
 def ville(request, id) :
 
     # Récupérer tous les magasins de la base de données
